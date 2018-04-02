@@ -1,2 +1,9 @@
-# nesmdb
-The NES Music Database (NES-MDB): Use machine learning to compose music for the Nintendo Entertainment System
+# The NES Music Database (NES-MDB)
+
+Dataset for training machine learning models to compose music for the NES audio processing unit (APU).
+
+## Installation
+
+`pip install -e .`
+
+## File formats
