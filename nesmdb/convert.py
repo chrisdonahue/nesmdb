@@ -22,66 +22,66 @@ def _verify_type(fp, expected):
     raise Exception('Expected {} filetype; specified {}'.format(expected, fp))
 
 
-def vgm_to_nrlr(in_fp, out_fp):
+def vgm_to_ndr(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
     vgm = f.read()
 
-  nrlr = nesmdb.vgm.vgm_to_nrlr(vgm)
+  ndr = nesmdb.vgm.vgm_to_ndr(vgm)
 
   with open(out_fp, 'wb') as f:
-    pickle.dump(nrlr, f)
+    pickle.dump(ndr, f)
 
 
-def vgm_to_nrlf(in_fp, out_fp):
+def vgm_to_ndf(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
     vgm = f.read()
 
-  nrlr = nesmdb.vgm.vgm_to_nrlr(vgm)
-  nrlf = nesmdb.vgm.nrlr_to_nrlf(nrlr)
+  ndr = nesmdb.vgm.vgm_to_ndr(vgm)
+  ndf = nesmdb.vgm.ndr_to_ndf(ndr)
 
   with open(out_fp, 'wb') as f:
-    pickle.dump(nrlf, f)
+    pickle.dump(ndf, f)
 
 
-def nrlf_to_vgm(in_fp, out_fp):
+def ndf_to_vgm(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    nrlf = pickle.load(f)
+    ndf = pickle.load(f)
 
-  nrlr = nesmdb.vgm.nrlf_to_nrlr(nrlf)
-  vgm = nesmdb.vgm.nrlr_to_vgm(nrlr)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
 
   with open(out_fp, 'wb') as f:
     f.write(vgm)
 
 
-def nrlr_to_txt(in_fp, out_fp):
+def ndr_to_txt(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    nrlr = pickle.load(f)
+    ndr = pickle.load(f)
 
-  txt = nesmdb.vgm.nrl_to_txt(nrlr)
+  txt = nesmdb.vgm.nd_to_txt(ndr)
 
   with open(out_fp, 'w') as f:
     f.write(txt)
 
 
-def nrlf_to_txt(in_fp, out_fp):
+def ndf_to_txt(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    nrlf = pickle.load(f)
+    ndf = pickle.load(f)
 
-  txt = nesmdb.vgm.nrl_to_txt(nrlf)
+  txt = nesmdb.vgm.nd_to_txt(ndf)
 
   with open(out_fp, 'w') as f:
     f.write(txt)
 
 
-def txt_to_nrlf(in_fp, out_fp):
+def txt_to_ndf(in_fp, out_fp):
   with open(in_fp, 'r') as f:
     txt = f.read()
 
-  nrlf = nesmdb.vgm.txt_to_nrl(txt)
+  ndf = nesmdb.vgm.txt_to_nd(txt)
 
   with open(out_fp, 'wb') as f:
-    pickle.dump(nrlf, f)
+    pickle.dump(ndf, f)
 
 
 def vgm_to_wav(in_fp, out_fp):
@@ -97,35 +97,35 @@ def vgm_to_wav(in_fp, out_fp):
   wavwrite(out_fp, 44100, wav)
 
 
-def nrlf_to_perfscore(in_fp, out_fp, nrlf_to_perfscore_rate):
+def ndf_to_exprsco(in_fp, out_fp, ndf_to_exprsco_rate):
   with open(in_fp, 'rb') as f:
-    nrlf = pickle.load(f)
+    ndf = pickle.load(f)
 
-  tscore = nesmdb.representations.nrlf_to_tscore(nrlf)
+  tscore = nesmdb.representations.ndf_to_tscore(ndf)
   mscore = nesmdb.representations.tscore_to_mscore(tscore)
-  perfscore = nesmdb.representations.mscore_downsample(mscore, nrlf_to_perfscore_rate, False)
+  exprsco = nesmdb.representations.mscore_downsample(mscore, ndf_to_exprsco_rate, False)
 
   with open(out_fp, 'wb') as f:
-    pickle.dump(perfscore, f)
+    pickle.dump(exprsco, f)
 
 
-def perfscore_to_img(in_fp, out_fp):
+def exprsco_to_img(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    perfscore = pickle.load(f)
+    exprsco = pickle.load(f)
 
-  img = nesmdb.representations.mscore_to_img_np(perfscore)
+  img = nesmdb.representations.mscore_to_img_np(exprsco)
 
   imwrite(out_fp, img)
 
 
-def perfscore_to_wav(in_fp, out_fp):
+def exprsco_to_wav(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    perfscore = pickle.load(f)
+    exprsco = pickle.load(f)
 
-  tscore = nesmdb.representations.mscore_to_tscore(perfscore)
-  nrlf = nesmdb.representations.tscore_to_nrlf(tscore)
-  nrlr = nesmdb.vgm.nrlf_to_nrlr(nrlf)
-  vgm = nesmdb.vgm.nrlr_to_vgm(nrlr)
+  tscore = nesmdb.representations.mscore_to_tscore(exprsco)
+  ndf = nesmdb.representations.tscore_to_ndf(tscore)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
 
   wav = nesmdb.vgm.vgm_to_wav(vgm)
 
@@ -136,28 +136,28 @@ def perfscore_to_wav(in_fp, out_fp):
   wavwrite(out_fp, 44100, wav)
 
 
-def perfscore_to_vgm(in_fp, out_fp):
+def exprsco_to_vgm(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    perfscore = pickle.load(f)
+    exprsco = pickle.load(f)
 
-  tscore = nesmdb.representations.mscore_to_tscore(perfscore)
-  nrlf = nesmdb.representations.tscore_to_nrlf(tscore)
-  nrlr = nesmdb.vgm.nrlf_to_nrlr(nrlf)
-  vgm = nesmdb.vgm.nrlr_to_vgm(nrlr)
+  tscore = nesmdb.representations.mscore_to_tscore(exprsco)
+  ndf = nesmdb.representations.tscore_to_ndf(tscore)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
 
   with open(out_fp, 'wb') as f:
     f.write(vgm)
 
 
-def compscore_to_wav(in_fp, out_fp):
+def compsco_to_wav(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    compscore = pickle.load(f)
+    compsco = pickle.load(f)
 
-  perfscore = nesmdb.representations.compscore_to_perfscore(compscore)
-  tscore = nesmdb.representations.mscore_to_tscore(perfscore)
-  nrlf = nesmdb.representations.tscore_to_nrlf(tscore)
-  nrlr = nesmdb.vgm.nrlf_to_nrlr(nrlf)
-  vgm = nesmdb.vgm.nrlr_to_vgm(nrlr)
+  exprsco = nesmdb.representations.compsco_to_exprsco(compsco)
+  tscore = nesmdb.representations.mscore_to_tscore(exprsco)
+  ndf = nesmdb.representations.tscore_to_ndf(tscore)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
 
   wav = nesmdb.vgm.vgm_to_wav(vgm)
 
@@ -168,35 +168,35 @@ def compscore_to_wav(in_fp, out_fp):
   wavwrite(out_fp, 44100, wav)
 
 
-def perfscore_to_compscore(in_fp, out_fp):
+def exprsco_to_compsco(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    perfscore = pickle.load(f)
+    exprsco = pickle.load(f)
 
-  compscore = nesmdb.representations.perfscore_to_compscore(perfscore)
+  compsco = nesmdb.representations.exprsco_to_compsco(exprsco)
 
   with open(out_fp, 'wb') as f:
-    pickle.dump(compscore, f)
+    pickle.dump(compsco, f)
 
 
-def compscore_to_perfscore(in_fp, out_fp):
+def compsco_to_exprsco(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    compscore = pickle.load(f)
+    compsco = pickle.load(f)
 
-  perfscore = nesmdb.representations.compscore_to_perfscore(compscore)
+  exprsco = nesmdb.representations.compsco_to_exprsco(compsco)
 
   with open(out_fp, 'wb') as f:
-    pickle.dump(perfscore, f)
+    pickle.dump(exprsco, f)
 
 
-def flatscore_to_wav(in_fp, out_fp):
+def blndsco_to_wav(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    flatscore = pickle.load(f)
+    blndsco = pickle.load(f)
 
-  perfscore = nesmdb.representations.flatscore_to_perfscore(flatscore)
-  tscore = nesmdb.representations.mscore_to_tscore(perfscore)
-  nrlf = nesmdb.representations.tscore_to_nrlf(tscore)
-  nrlr = nesmdb.vgm.nrlf_to_nrlr(nrlf)
-  vgm = nesmdb.vgm.nrlr_to_vgm(nrlr)
+  exprsco = nesmdb.representations.blndsco_to_exprsco(blndsco)
+  tscore = nesmdb.representations.mscore_to_tscore(exprsco)
+  ndf = nesmdb.representations.tscore_to_ndf(tscore)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
 
   wav = nesmdb.vgm.vgm_to_wav(vgm)
 
@@ -238,29 +238,30 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser()
 
   conversion_to_types = {
-      'vgm_to_nrlr': ('.vgm', '.nrlr.pkl'),
-      'vgm_to_nrlf': ('.vgm', '.nrlf.pkl'),
-      'nrlf_to_vgm': ('.nrlf.pkl', '.nrlf.vgm'),
-      'nrlr_to_txt': ('.nrlr.pkl', '.nrlr.txt'),
-      'nrlf_to_txt': ('.nrlf.pkl', '.nrlf.txt'),
-      'txt_to_nrlf': ('.nrlf.txt', '.nrlf.pkl'),
-      'vgm_to_wav': ('.vgm', '.wav'),
-      'nrlf_to_perfscore': ('.nrlf.pkl', '.perfscore.pkl'),
-      'perfscore_to_img': ('.perfscore.pkl', '.png'),
-      'perfscore_to_wav': ('.perfscore.pkl', '.wav'),
-      'perfscore_to_vgm': ('.perfscore.pkl', '.vgm'),
-      'flatscore_to_wav': ('.flatscore.pkl', '.wav'),
-      'compscore_to_wav': ('.compscore.pkl', '.wav'),
-      'perfscore_to_compscore': ('.perfscore.pkl', '.compscore.pkl'),
-      'compscore_to_perfscore': ('.compscore.pkl', '.perfscore.pkl'),
       'vgm_shorten': ('.vgm', '.short.vgm'),
       'vgm_simplify': ('.vgm', '.simp.vgm'),
+      'vgm_to_wav': ('.vgm', '.wav'),
+      'ndf_to_wav': ('.ndf', '.wav'),
+      'vgm_to_ndr': ('.vgm', '.ndr.pkl'),
+      'vgm_to_ndf': ('.vgm', '.ndf.pkl'),
+      'ndf_to_vgm': ('.ndf.pkl', '.ndf.vgm'),
+      'ndr_to_txt': ('.ndr.pkl', '.ndr.txt'),
+      'ndf_to_txt': ('.ndf.pkl', '.ndf.txt'),
+      'txt_to_ndf': ('.ndf.txt', '.ndf.pkl'),
+      'ndf_to_exprsco': ('.ndf.pkl', '.exprsco.pkl'),
+      'exprsco_to_img': ('.exprsco.pkl', '.png'),
+      'exprsco_to_wav': ('.exprsco.pkl', '.wav'),
+      'exprsco_to_vgm': ('.exprsco.pkl', '.vgm'),
+      'blndsco_to_wav': ('.blndsco.pkl', '.wav'),
+      'compsco_to_wav': ('.compsco.pkl', '.wav'),
+      'exprsco_to_compsco': ('.exprsco.pkl', '.compsco.pkl'),
+      'compsco_to_exprsco': ('.compsco.pkl', '.exprsco.pkl'),
   }
 
   conversion_to_kwargs = {
-      'nrlf_to_perfscore': ['nrlf_to_perfscore_rate'],
+      'vgm_simplify': ['vgm_simplify_nop1', 'vgm_simplify_nop2', 'vgm_simplify_notr', 'vgm_simplify_nono'],
       'vgm_shorten': ['vgm_shorten_start', 'vgm_shorten_nmax'],
-      'vgm_simplify': ['vgm_simplify_nop1', 'vgm_simplify_nop2', 'vgm_simplify_notr', 'vgm_simplify_nono']
+      'ndf_to_exprsco': ['ndf_to_exprsco_rate'],
   }
 
   parser.add_argument('conversion', type=str, choices=conversion_to_types.keys())
@@ -273,7 +274,7 @@ if __name__ == '__main__':
   parser.add_argument('--vgm_simplify_nop2', action='store_true', dest='vgm_simplify_nop2')
   parser.add_argument('--vgm_simplify_notr', action='store_true', dest='vgm_simplify_notr')
   parser.add_argument('--vgm_simplify_nono', action='store_true', dest='vgm_simplify_nono')
-  parser.add_argument('--nrlf_to_perfscore_rate', type=float)
+  parser.add_argument('--ndf_to_exprsco_rate', type=float)
 
   parser.set_defaults(
       conversion=None,
@@ -286,7 +287,7 @@ if __name__ == '__main__':
       vgm_simplify_nop2=False,
       vgm_simplify_notr=False,
       vgm_simplify_nono=False,
-      nrlf_to_perfscore_rate=None)
+      ndf_to_exprsco_rate=None)
 
   args = parser.parse_args()
 

@@ -1,5 +1,5 @@
 from nesmdb.vgm.bintypes import *
-#from nesmdb.vgm import vgm_to_nrlr, nrlr_to_vgm
+from nesmdb.vgm import vgm_to_ndr, ndr_to_vgm
 
 
 def vgm_simplify(vgm, nop1=False, nop2=False, notr=False, nono=False, nodm=True):
@@ -80,15 +80,15 @@ def vgm_simplify(vgm, nop1=False, nop2=False, notr=False, nono=False, nodm=True)
 
 
 def vgm_shorten(vgm, nmax, start=None):
-  nrlr = vgm_to_nrlr(vgm)
+  ndr = vgm_to_ndr(vgm)
 
-  meta = nrlr[:2]
-  nrlr = nrlr[2:]
+  meta = ndr[:2]
+  ndr = ndr[2:]
 
   if start is not None:
-    nrlr = nrlr[start:]
-  nrlr = nrlr[:nmax]
+    ndr = ndr[start:]
+  ndr = ndr[:nmax]
 
-  vgm = nrlr_to_vgm(meta + nrlr)
+  vgm = ndr_to_vgm(meta + ndr)
 
   return vgm
