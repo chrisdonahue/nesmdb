@@ -8,10 +8,11 @@ This `nesmdb` repository is a Python package that can be used to convert between
 
 Links to download the datasets in various representations:
 
-1. Expressive Score: [link pending]()
-1. Separated Score: [link pending]()
-1. Blended Score: [link pending]()
-1. (Text-based) NES Dissasembly: [link pending]()
+1. (Array-based) Expressive Score: [link pending]()
+1. (Array-based) Separated Score: [link pending]()
+1. (Array-based) Blended Score: [link pending]()
+1. (Text-based) NES Dissasembly (Functional): [link pending]()
+1. (Text-based) NES Dissasembly (Raw): [link pending]()
 1. (Rawest) VGM: [link pending]()
 
 ### Score formats
@@ -34,7 +35,7 @@ If you have downloaded one of the datasets above and simply want to listen to th
 
 ### Rendering scores as WAVs
 
-The `vgm2wav` tool from [VGMPlay](https://github.com/vgmrips/vgmplay) is required to synthesize NES audio. NES-MDB will look for this binary on your path or in the ${VGMPLAYDIR} environment variable. Installation instructions:
+The `vgm2wav` tool from [VGMPlay](https://github.com/vgmrips/vgmplay) is required to synthesize NES audio. NES-MDB will look for this binary on your path or at the `${VGMTOWAV}` environment variable. Installation instructions:
 
 1. `wget https://github.com/vgmrips/vgmplay/archive/0.40.8.tar.gz`
 1. `tar xvfz 0.40.8.tar.gz`
@@ -47,7 +48,8 @@ Use the following commands to convert a batch of files to WAVs depending on your
 1. Expressive score: `python -m nesmdb.convert exprsco_to_wav --out_dir wav *.exprsco.pkl`
 1. Separated score: `python -m nesmdb.convert exprsco_to_wav --out_dir wav *.seprsco.pkl`
 1. Blended score: `python -m nesmdb.convert exprsco_to_wav --out_dir wav *.blndsco.pkl`
-1. NES Dissasembly: `python -m nesmdb.convert ndf_to_wav --out_dir wav *.ndf.pkl`
+1. NES Dissasembly (Functional): `python -m nesmdb.convert ndf_to_wav --out_dir wav *.ndf.pkl`
+1. NES Dissasembly (Raw): `python -m nesmdb.convert ndr_to_wav --out_dir wav *.ndr.pkl`
 1. VGM: `python -m nesmdb.convert vgm_to_wav --out_dir wav *.vgm`
 
 ## Advanced Package Usage
