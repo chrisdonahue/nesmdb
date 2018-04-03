@@ -1,8 +1,8 @@
 # The NES Music Database
 
-The NES Music Database (NES-MDB) is a dataset for training machine learning models to compose music for the NES audio processing unit.
+The NES Music Database (NES-MDB) is a dataset intended for training models to compose music for the NES.
 
-This `nesmdb` repository is a Python package that can be used to convert between low- and high-level representations of NES music. Specifically, it converts between the [VGM file format](http://vgmrips.net/wiki/VGM_Specification) and simpler array-based representations in Numpy. **You only need to install this package if you want to listen to your results as synthesized by the NES.**
+This repository houses `nesmdb`, a Python package that can be used to convert between low- and high-level representations of NES music. Specifically, it converts between the [VGM file format](http://vgmrips.net/wiki/VGM_Specification) and simpler Numpy representations. **You only need to install this package if you want to listen to your results as synthesized by the NES.**
 
 ## NES-MDB Dataset
 
