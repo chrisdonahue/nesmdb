@@ -8,9 +8,9 @@ This `nesmdb` repository is a Python package that can be used to convert between
 
 Links to download the datasets in various representations:
 
-1. (Array-based) Expressive Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_exprscore.tar.gz)
-1. (Array-based) Separated Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_seprscore.tar.gz)
-1. (Array-based) Blended Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_blndscore.tar.gz)
+1. (Array-based) Expressive Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_exprsco.tar.gz)
+1. (Array-based) Separated Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_seprsco.tar.gz)
+1. (Array-based) Blended Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_blndsco.tar.gz)
 1. (Text-based) NES Dissasembly (Functional): [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb_ndf.tar.gz)
 1. (Text-based) NES Dissasembly (Raw): [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb_ndr.tar.gz)
 1. (Rawest) VGM: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb_vgm.tar.gz)
