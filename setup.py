@@ -8,10 +8,12 @@ setup(
     author='Chris Donahue',
     author_email='cdonahue@ucsd.edu',
     license='MIT',
-    packages=['nesmdb'],
+    packages=['nesmdb', 'nesmdb.vgm'],
     keywords='music nes mir midi',
     install_requires=[
       'numpy >= 1.7.0',
       'scipy >= 1.0.0',
+      'Pillow >= 5.1.0',
+      'tqdm >= 4.19.9',
     ]
 )
