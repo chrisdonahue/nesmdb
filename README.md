@@ -1,4 +1,4 @@
-# The NES Music Database (NES-MDB)
+# The NES Music Database
 
 The NES Music Database (NES-MDB) is a dataset for training machine learning models to compose music for the NES audio processing unit.
 
