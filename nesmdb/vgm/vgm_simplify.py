@@ -82,8 +82,8 @@ def vgm_simplify(vgm, nop1=False, nop2=False, notr=False, nono=False, nodm=True)
 def vgm_shorten(vgm, nmax, start=None):
   ndr = vgm_to_ndr(vgm)
 
-  meta = ndr[:2]
-  ndr = ndr[2:]
+  meta = ndr[:1]
+  ndr = ndr[1:]
 
   if start is not None:
     ndr = ndr[start:]

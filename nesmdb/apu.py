@@ -144,4 +144,4 @@ register_function_bitmasks['p2'] = register_function_bitmasks['p1']
 
 
 # Number of frame counter ticks for various settings of the length counter
-apu_length_counter_table = [10, 254, 20, 2, 40, 4, 80, 6, 160, 8, 60, 10, 14, 12, 26, 14, 12, 16, 24, 18, 48, 20, 96, 22, 192, 24, 72, 26, 16, 28, 32, 30]
+length_counter_table = [10, 254, 20, 2, 40, 4, 80, 6, 160, 8, 60, 10, 14, 12, 26, 14, 12, 16, 24, 18, 48, 20, 96, 22, 192, 24, 72, 26, 16, 28, 32, 30]

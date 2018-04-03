@@ -22,6 +22,29 @@ def _verify_type(fp, expected):
     raise Exception('Expected {} filetype; specified {}'.format(expected, fp))
 
 
+""" VGM Simplifiers """
+def vgm_simplify(in_fp, out_fp, vgm_simplify_nop1, vgm_simplify_nop2, vgm_simplify_notr, vgm_simplify_nono):
+  with open(in_fp, 'rb') as f:
+    vgm = f.read()
+
+  vgm, _ = nesmdb.vgm.vgm_simplify(vgm, vgm_simplify_nop1, vgm_simplify_nop2, vgm_simplify_notr, vgm_simplify_nono)
+
+  with open(out_fp, 'wb') as f:
+    f.write(vgm)
+
+
+def vgm_shorten(in_fp, out_fp, vgm_shorten_start, vgm_shorten_nmax):
+  with open(in_fp, 'rb') as f:
+    vgm = f.read()
+
+  vgm = nesmdb.vgm.vgm_shorten(vgm, vgm_shorten_nmax, vgm_shorten_start)
+
+  with open(out_fp, 'wb') as f:
+    f.write(vgm)
+
+""" VGM Simplifiers """
+
+
 def vgm_to_ndr(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
     vgm = f.read()
@@ -84,17 +107,21 @@ def txt_to_ndf(in_fp, out_fp):
     pickle.dump(ndf, f)
 
 
+def _f32_to_i16(wav):
+  wav *= 32767.
+  wav = np.clip(wav, -32767., 32767.)
+  wav = wav.astype(np.int16)
+
+  return wav
+
+
 def vgm_to_wav(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
     vgm = f.read()
 
   wav = nesmdb.vgm.vgm_to_wav(vgm)
 
-  wav *= 32767.
-  wav = np.clip(wav, -32767., 32767.)
-  wav = wav.astype(np.int16)
-
-  wavwrite(out_fp, 44100, wav)
+  wavwrite(out_fp, 44100, _f32_to_i16(wav))
 
 
 def ndf_to_exprsco(in_fp, out_fp, ndf_to_exprsco_rate):
@@ -149,11 +176,11 @@ def exprsco_to_vgm(in_fp, out_fp):
     f.write(vgm)
 
 
-def compsco_to_wav(in_fp, out_fp):
+def seprsco_to_wav(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    compsco = pickle.load(f)
+    seprsco = pickle.load(f)
 
-  exprsco = nesmdb.representations.compsco_to_exprsco(compsco)
+  exprsco = nesmdb.representations.seprsco_to_exprsco(seprsco)
   tscore = nesmdb.representations.mscore_to_tscore(exprsco)
   ndf = nesmdb.representations.tscore_to_ndf(tscore)
   ndr = nesmdb.vgm.ndf_to_ndr(ndf)
@@ -168,21 +195,21 @@ def compsco_to_wav(in_fp, out_fp):
   wavwrite(out_fp, 44100, wav)
 
 
-def exprsco_to_compsco(in_fp, out_fp):
+def exprsco_to_seprsco(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
     exprsco = pickle.load(f)
 
-  compsco = nesmdb.representations.exprsco_to_compsco(exprsco)
+  seprsco = nesmdb.representations.exprsco_to_seprsco(exprsco)
 
   with open(out_fp, 'wb') as f:
-    pickle.dump(compsco, f)
+    pickle.dump(seprsco, f)
 
 
-def compsco_to_exprsco(in_fp, out_fp):
+def seprsco_to_exprsco(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
-    compsco = pickle.load(f)
+    seprsco = pickle.load(f)
 
-  exprsco = nesmdb.representations.compsco_to_exprsco(compsco)
+  exprsco = nesmdb.representations.seprsco_to_exprsco(seprsco)
 
   with open(out_fp, 'wb') as f:
     pickle.dump(exprsco, f)
@@ -207,24 +234,8 @@ def blndsco_to_wav(in_fp, out_fp):
   wavwrite(out_fp, 44100, wav)
 
 
-def vgm_shorten(in_fp, out_fp, vgm_shorten_start, vgm_shorten_nmax):
-  with open(in_fp, 'rb') as f:
-    vgm = f.read()
-
-  vgm = nesmdb.vgm.vgm_shorten(vgm, vgm_shorten_nmax, vgm_shorten_start)
-
-  with open(out_fp, 'wb') as f:
-    f.write(vgm)
 
 
-def vgm_simplify(in_fp, out_fp, vgm_simplify_nop1, vgm_simplify_nop2, vgm_simplify_notr, vgm_simplify_nono):
-  with open(in_fp, 'rb') as f:
-    vgm = f.read()
-
-  vgm, _ = nesmdb.vgm.vgm_simplify(vgm, vgm_simplify_nop1, vgm_simplify_nop2, vgm_simplify_notr, vgm_simplify_nono)
-
-  with open(out_fp, 'wb') as f:
-    f.write(vgm)
 
 
 if __name__ == '__main__':
@@ -238,24 +249,32 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser()
 
   conversion_to_types = {
-      'vgm_shorten': ('.vgm', '.short.vgm'),
       'vgm_simplify': ('.vgm', '.simp.vgm'),
-      'vgm_to_wav': ('.vgm', '.wav'),
-      'ndf_to_wav': ('.ndf', '.wav'),
-      'vgm_to_ndr': ('.vgm', '.ndr.pkl'),
-      'vgm_to_ndf': ('.vgm', '.ndf.pkl'),
-      'ndf_to_vgm': ('.ndf.pkl', '.ndf.vgm'),
+      'vgm_shorten': ('.vgm', '.short.vgm'),
+
+      'vgm_to_ndr': ('.simp.vgm', '.ndr.pkl'),
       'ndr_to_txt': ('.ndr.pkl', '.ndr.txt'),
+
+      'vgm_to_ndf': ('.simp.vgm', '.ndf.pkl'),
+      'ndf_to_vgm': ('.ndf.pkl', '.ndf.vgm'),
+
       'ndf_to_txt': ('.ndf.pkl', '.ndf.txt'),
       'txt_to_ndf': ('.ndf.txt', '.ndf.pkl'),
+
+      'ndr_to_txt': ('.ndf.pkl', '.ndf.txt'),
+
+      'vgm_to_wav': ('.vgm', '.wav'),
+      'ndr_to_wav': ('.ndr.pkl', '.wav'),
+      'ndf_to_wav': ('.ndf.pkl', '.wav'),
+      'blndsco_to_wav': ('.blndsco.pkl', '.wav'),
+      'seprsco_to_wav': ('.seprsco.pkl', '.wav'),
+      'exprsco_to_wav': ('.exprsco.pkl', '.wav'),
+
       'ndf_to_exprsco': ('.ndf.pkl', '.exprsco.pkl'),
       'exprsco_to_img': ('.exprsco.pkl', '.png'),
-      'exprsco_to_wav': ('.exprsco.pkl', '.wav'),
       'exprsco_to_vgm': ('.exprsco.pkl', '.vgm'),
-      'blndsco_to_wav': ('.blndsco.pkl', '.wav'),
-      'compsco_to_wav': ('.compsco.pkl', '.wav'),
-      'exprsco_to_compsco': ('.exprsco.pkl', '.compsco.pkl'),
-      'compsco_to_exprsco': ('.compsco.pkl', '.exprsco.pkl'),
+      'exprsco_to_seprsco': ('.exprsco.pkl', '.seprsco.pkl'),
+      'seprsco_to_exprsco': ('.seprsco.pkl', '.exprsco.pkl'),
   }
 
   conversion_to_kwargs = {
