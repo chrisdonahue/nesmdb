@@ -76,7 +76,7 @@ def exprsco_to_midi(exprsco):
       ins.control_changes.append(cc)
 
   # Add instruments to MIDI file
-  midi = pretty_midi.PrettyMIDI()
+  midi = pretty_midi.PrettyMIDI(initial_tempo=120, resolution=22050)
   midi.instruments.extend([p1, p2, tr, no])
 
   # Write/read MIDI file
