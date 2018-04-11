@@ -59,6 +59,18 @@ def _cycle_blndsco(ndr, rate):
   return ndr
 
 
+def _cycle_midi(ndr):
+  ndf = nesmdb.vgm.ndr_to_ndf(ndr)
+  rawsco = nesmdb.score.ndf_to_rawsco(ndf)
+  exprsco = nesmdb.score.rawsco_to_exprsco(rawsco)
+  midi = nesmdb.score.exprsco_to_midi(exprsco)
+  exprsco = nesmdb.score.midi_to_exprsco(midi)
+  rawsco = nesmdb.score.exprsco_to_rawsco(exprsco)
+  ndf = nesmdb.score.rawsco_to_ndf(rawsco)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  return ndr
+
+
 def vgm_cycle(vgm, representation='ndf', keep_wav=False, **kwargs):
   # Cycle
   source_ndr = nesmdb.vgm.vgm_to_ndr(source_vgm)
@@ -74,6 +86,8 @@ def vgm_cycle(vgm, representation='ndf', keep_wav=False, **kwargs):
     cycle_ndr = _cycle_compsco(source_ndr, rate=kwargs['score_rate'])
   elif representation == 'blndsco':
     cycle_ndr = _cycle_blndsco(source_ndr, rate=kwargs['score_rate'])
+  elif representation == 'midi':
+    cycle_ndr = _cycle_midi(source_ndr)
   else:
     raise NotImplementedError()
   cycle_vgm = nesmdb.vgm.ndr_to_vgm(cycle_ndr)
@@ -109,7 +123,7 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
 
-  parser.add_argument('representation', type=str, choices=['ndr', 'ndf', 'rawsco', 'exprsco', 'seprsco', 'blndsco'])
+  parser.add_argument('representation', type=str, choices=['ndr', 'ndf', 'rawsco', 'exprsco', 'seprsco', 'blndsco', 'midi'])
   parser.add_argument('fps', type=str, nargs='+')
   parser.add_argument('--keep_vgm', action='store_true', dest='keep_vgm')
   parser.add_argument('--keep_wav', action='store_true', dest='keep_wav')
@@ -126,7 +140,7 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  if args.representation not in ['ndr', 'ndf', 'rawsco'] and args.score_rate is None:
+  if args.representation not in ['ndr', 'ndf', 'rawsco', 'midi'] and args.score_rate is None:
     print 'Must specify --score_rate'
     sys.exit(1)
 
