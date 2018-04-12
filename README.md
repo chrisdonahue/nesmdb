@@ -8,12 +8,13 @@ This repository houses `nesmdb`, a Python package that can be used to convert be
 
 Links to download the datasets in various representations:
 
-1. (Array-based) Expressive Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_exprsco.tar.gz)
-1. (Array-based) Separated Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_seprsco.tar.gz)
-1. (Array-based) Blended Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb24_blndsco.tar.gz)
-1. (Text-based) NES Dissasembly (Functional): [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb_ndf.tar.gz)
-1. (Text-based) NES Dissasembly (Raw): [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb_ndr.tar.gz)
-1. (Rawest) VGM: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb_vgm.tar.gz)
+1. (Array-based) Expressive Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb24_exprsco.tar.gz)
+1. (Array-based) Separated Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb24_seprsco.tar.gz)
+1. (Array-based) Blended Score: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb24_blndsco.tar.gz)
+1. (Event-based) MIDI: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_midi.tar.gz)
+1. (Text-based) NES Dissasembly (Functional): [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_ndf.tar.gz)
+1. (Text-based) NES Dissasembly (Raw): [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_ndr.tar.gz)
+1. (Rawest) VGM: [download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_vgm.tar.gz)
 
 ### Score formats
 
@@ -48,6 +49,7 @@ Use the following commands to convert a batch of files to WAVs depending on your
 1. Expressive score: `python -m nesmdb.convert exprsco_to_wav --out_dir wav *.exprsco.pkl`
 1. Separated score: `python -m nesmdb.convert exprsco_to_wav --out_dir wav *.seprsco.pkl`
 1. Blended score: `python -m nesmdb.convert exprsco_to_wav --out_dir wav *.blndsco.pkl`
+1. MIDI: `python -m nesmdb.convert midi_to_wav --out_dir wav *.mid`
 1. NES Dissasembly (Functional): `python -m nesmdb.convert ndf_to_wav --out_dir wav *.ndf.pkl`
 1. NES Dissasembly (Raw): `python -m nesmdb.convert ndr_to_wav --out_dir wav *.ndr.pkl`
 1. VGM: `python -m nesmdb.convert vgm_to_wav --out_dir wav *.vgm`
