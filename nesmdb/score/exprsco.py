@@ -49,6 +49,8 @@ def rawsco_to_exprsco(rawsco, midi_valid_range=(21, 108)):
 def exprsco_downsample(exprsco, rate, adaptive):
   rate_prev, nsamps, exprsco = exprsco
   assert abs(rate_prev - 44100.) < 1e-6
+  if abs(rate - 44100.) < 1e-6:
+    return (rate_prev, nsamps, exprsco)
 
   if rate is None:
     # Find note onsets

@@ -148,6 +148,18 @@ def ndf_to_exprsco(in_fp, out_fp, ndf_to_exprsco_rate):
     pickle.dump(exprsco, f)
 
 
+def ndf_to_midi(in_fp, out_fp):
+  with open(in_fp, 'rb') as f:
+    ndf = pickle.load(f)
+
+  rawsco = nesmdb.score.ndf_to_rawsco(ndf)
+  exprsco = nesmdb.score.rawsco_to_exprsco(rawsco)
+  midi = nesmdb.score.exprsco_to_midi(exprsco)
+
+  with open(out_fp, 'wb') as f:
+    f.write(midi)
+
+
 def exprsco_to_seprsco(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
     exprsco = pickle.load(f)
@@ -202,6 +214,22 @@ def ndf_to_wav(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
     ndf = pickle.load(f)
 
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
+  wav = nesmdb.vgm.vgm_to_wav(vgm)
+
+  wavwrite(out_fp, 44100, _f32_to_i16(wav))
+
+
+def midi_to_wav(in_fp, out_fp, midi_to_wav_rate=None):
+  with open(in_fp, 'rb') as f:
+    midi = f.read()
+
+  exprsco = nesmdb.score.midi_to_exprsco(midi)
+  if midi_to_wav_rate is not None:
+    exprsco = nesmdb.score.exprsco_downsample(exprsco, midi_to_wav_rate, False)
+  rawsco = nesmdb.score.exprsco_to_rawsco(exprsco)
+  ndf = nesmdb.score.rawsco_to_ndf(rawsco)
   ndr = nesmdb.vgm.ndf_to_ndr(ndf)
   vgm = nesmdb.vgm.ndr_to_vgm(ndr)
   wav = nesmdb.vgm.vgm_to_wav(vgm)
@@ -279,6 +307,7 @@ if __name__ == '__main__':
 
       # NES-MDB score formats
       'ndf_to_exprsco': ('.ndf.pkl', '.exprsco.pkl'),
+      'ndf_to_midi': ('.ndf.pkl', '.mid'),
       'exprsco_to_seprsco': ('.exprsco.pkl', '.seprsco.pkl'),
       'exprsco_to_blndsco': ('.exprsco.pkl', '.blndsco.pkl'),
 
@@ -286,6 +315,7 @@ if __name__ == '__main__':
       'vgm_to_wav': ('.vgm', '.wav'),
       'ndr_to_wav': ('.ndr.pkl', '.wav'),
       'ndf_to_wav': ('.ndf.pkl', '.wav'),
+      'midi_to_wav': ('.mid', '.wav'),
       'exprsco_to_wav': ('.exprsco.pkl', '.wav'),
       'seprsco_to_wav': ('.seprsco.pkl', '.wav'),
       'blndsco_to_wav': ('.blndsco.pkl', '.wav'),
@@ -295,6 +325,7 @@ if __name__ == '__main__':
       'vgm_simplify': ['vgm_simplify_nop1', 'vgm_simplify_nop2', 'vgm_simplify_notr', 'vgm_simplify_nono'],
       'vgm_shorten': ['vgm_shorten_start', 'vgm_shorten_nmax'],
       'ndf_to_exprsco': ['ndf_to_exprsco_rate'],
+      'midi_to_wav': ['midi_to_wav_rate'],
   }
 
   parser.add_argument('conversion', type=str, choices=conversion_to_types.keys())
@@ -308,6 +339,7 @@ if __name__ == '__main__':
   parser.add_argument('--vgm_simplify_notr', action='store_true', dest='vgm_simplify_notr')
   parser.add_argument('--vgm_simplify_nono', action='store_true', dest='vgm_simplify_nono')
   parser.add_argument('--ndf_to_exprsco_rate', type=float)
+  parser.add_argument('--midi_to_wav_rate', type=float)
 
   parser.set_defaults(
       conversion=None,
@@ -320,7 +352,8 @@ if __name__ == '__main__':
       vgm_simplify_nop2=False,
       vgm_simplify_notr=False,
       vgm_simplify_nono=False,
-      ndf_to_exprsco_rate=None)
+      ndf_to_exprsco_rate=None,
+      midi_to_wav_rate=None)
 
   args = parser.parse_args()
 
