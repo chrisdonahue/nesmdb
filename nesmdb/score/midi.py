@@ -79,21 +79,21 @@ def exprsco_to_midi(exprsco):
   midi = pretty_midi.PrettyMIDI(initial_tempo=120, resolution=22050)
   midi.instruments.extend([p1, p2, tr, no])
 
+  # Create indicator for end of song
+  eos = pretty_midi.TimeSignature(1, 1, nsamps / 44100.)
+  midi.time_signature_changes.append(eos)
+
   # Write/read MIDI file
   mf = tempfile.NamedTemporaryFile('rb')
   midi.write(mf.name)
   midi = mf.read()
   mf.close()
 
-  return rate, nsamps, midi
+  return midi
 
 
 def midi_to_exprsco(midi):
   import pretty_midi
-
-  rate, nsamps, midi = midi
-
-  assert rate == 44100
 
   # Write/read MIDI file
   mf = tempfile.NamedTemporaryFile('wb')
@@ -101,6 +101,10 @@ def midi_to_exprsco(midi):
   mf.seek(0)
   midi = pretty_midi.PrettyMIDI(mf.name)
   mf.close()
+
+  # Recover number of samples from time signature change indicator
+  assert len(midi.time_signature_changes) == 2
+  nsamps = int(np.round(midi.time_signature_changes[1].time * 44100))
 
   # Find voices in MIDI
   exprsco = np.zeros((nsamps, 4, 3), dtype=np.uint8)
@@ -153,4 +157,4 @@ def midi_to_exprsco(midi):
 
       exprsco[i, ch] = (note, velocity, timbre)
 
-  return rate, nsamps, exprsco
+  return 44100, nsamps, exprsco
