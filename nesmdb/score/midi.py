@@ -57,7 +57,7 @@ def exprsco_to_midi(exprsco):
       last_velocity = velocity
       last_timbre = timbre
     if last_note != 0:
-      note_ends.append(s)
+      note_ends.append(s + 1)
 
     assert len(note_starts) == len(note_ends)
     notes[i] = zip(note_starts, note_ends)
