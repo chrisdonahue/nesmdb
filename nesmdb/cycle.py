@@ -8,7 +8,7 @@ def _cycle_ndr(ndr):
   return ndr
 
 
-def _cycle_ndr(ndr):
+def _cycle_ndf(ndr):
   ndf = nesmdb.vgm.ndr_to_ndf(ndr)
   ndr = nesmdb.vgm.ndf_to_ndr(ndf)
   return ndr
@@ -78,7 +78,7 @@ def vgm_cycle(vgm, representation='ndf', keep_wav=False, **kwargs):
   if representation == 'ndr':
     cycle_ndr = _cycle_ndr(source_ndr)
   elif representation == 'ndf':
-    cycle_ndr = _cycle_ndr(source_ndr)
+    cycle_ndr = _cycle_ndf(source_ndr)
   elif representation == 'rawsco':
     cycle_ndr = _cycle_rawsco(source_ndr)
   elif representation == 'exprsco':
