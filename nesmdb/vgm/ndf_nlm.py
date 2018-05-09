@@ -61,6 +61,8 @@ def ndf_to_nlm(ndf):
       if func == 'p2_tl' and (func_to_val['p2_se'] == 1):
         preserve = True
 
+      preserve = True
+
       if (changed or preserve) and not delete:
         lm.append(comm)
       else:
@@ -83,11 +85,30 @@ def ndf_to_nlm(ndf):
 
 def nlm_to_ndf(lm):
   ndf = [lm[0]]
+
+  offset_last = None
+  natoms = 0
+  atom_funcs = set()
+
   for comm in lm[1:]:
     if comm[0] == 'w':
       ndf.append(('wait', comm[1]))
+
+      offset_last = None
+      natoms = 0
+      atom_funcs = set()
     else:
       ch, fu = comm[0].split('_')
-      ndf.append(('apu', ch, fu, comm[1], -1, func_to_offset(ch, fu)))
+      offset = func_to_offset(ch, fu)
+
+      func = '{}_{}'.format(ch, fu)
+
+      if offset_last is not None and offset_last != offset or func in atom_funcs:
+        atom_funcs = set()
+        natoms += 1
+      atom_funcs.add(func)
+      offset_last = offset
+
+      ndf.append(('apu', ch, fu, comm[1], natoms, func_to_offset(ch, fu)))
 
   return ndf
