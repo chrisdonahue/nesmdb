@@ -8,18 +8,9 @@ _DELETE = [
 
 
 _VOLATILE = [
-    'p1_tl',
     'p1_ll',
-    'p1_th',
-
-    'p2_tl',
-    'p2_th',
     'p2_ll',
-
-    'tr_tl',
-    'tr_th',
     'tr_ll',
-
     'no_ll',
 
     'ch_p1',
@@ -60,11 +51,20 @@ def ndf_to_lm(ndf):
       funcs.add(func)
 
       delete = func in _DELETE
-      preserve = func in _VOLATILE or func_to_val[func] != val
+      preserve = func_to_val[func] != val or func in _VOLATILE
+      changed = func_to_val[func] != val
 
-      if preserve and not delete:
+      if func == 'p1_tl' and (func_to_val['p1_se'] == 1):
+        preserve = True
+      if func == 'p2_tl' and (func_to_val['p2_se'] == 1):
+        preserve = True
+
+      if (changed or preserve) and not delete:
         lm.append(comm)
-        func_to_val[func] = val
+      else:
+        pass
+
+      func_to_val[func] = val
     else:
       raise NotImplementedError()
 
