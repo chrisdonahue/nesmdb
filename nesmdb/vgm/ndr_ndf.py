@@ -165,16 +165,10 @@ def ndf_to_ndr(ndf):
       val = comm[3]
       natoms = comm[4]
       param_offset = comm[5]
-      param_bitmask = None
 
       # Find offset/bitmask
       reg = registers[dest]
-      dest_bitmasks = register_function_bitmasks[dest]
-      for bitmask in dest_bitmasks[param_offset]:
-        if bitmask[0] == param:
-          param_bitmask = bitmask[1]
-          break
-      assert param_offset is not None
+      param_bitmask = func_to_bitmask(dest, param)
 
       # Apply mask
       mask_bin = '{:08b}'.format(param_bitmask)

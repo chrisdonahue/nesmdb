@@ -133,6 +133,33 @@ def ndf_to_vgm(in_fp, out_fp):
     f.write(vgm)
 
 
+# NES disassembly functional
+
+
+def vgm_to_nlm(in_fp, out_fp):
+  with open(in_fp, 'rb') as f:
+    vgm = f.read()
+
+  ndr = nesmdb.vgm.vgm_to_ndr(vgm)
+  ndf = nesmdb.vgm.ndr_to_ndf(ndr)
+  nlm = nesmdb.vgm.ndf_to_nlm(ndf)
+
+  with open(out_fp, 'wb') as f:
+    pickle.dump(nlm, f)
+
+
+def nlm_to_vgm(in_fp, out_fp):
+  with open(in_fp, 'rb') as f:
+    nlm = pickle.load(f)
+
+  ndf = nesmdb.vgm.nlm_to_ndf(nlm)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
+
+  with open(out_fp, 'wb') as f:
+    f.write(vgm)
+
+
 # NES-MDB score formats
 
 
@@ -214,6 +241,18 @@ def ndf_to_wav(in_fp, out_fp):
   with open(in_fp, 'rb') as f:
     ndf = pickle.load(f)
 
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
+  wav = nesmdb.vgm.vgm_to_wav(vgm)
+
+  wavwrite(out_fp, 44100, _f32_to_i16(wav))
+
+
+def nlm_to_wav(in_fp, out_fp):
+  with open(in_fp, 'rb') as f:
+    nlm = pickle.load(f)
+
+  ndf = nesmdb.vgm.nlm_to_ndf(nlm)
   ndr = nesmdb.vgm.ndf_to_ndr(ndf)
   vgm = nesmdb.vgm.ndr_to_vgm(ndr)
   wav = nesmdb.vgm.vgm_to_wav(vgm)
@@ -305,6 +344,10 @@ if __name__ == '__main__':
       'txt_to_ndf': ('.ndf.txt', '.ndf.pkl'),
       'ndf_to_vgm': ('.ndf.pkl', '.ndf.vgm'),
 
+      # NES language modeling format
+      'vgm_to_nlm': ('.vgm', '.nlm.pkl'),
+      'nlm_to_vgm': ('.nlm.pkl', '.nlm.vgm'),
+
       # NES-MDB score formats
       'ndf_to_exprsco': ('.ndf.pkl', '.exprsco.pkl'),
       'ndf_to_midi': ('.ndf.pkl', '.mid'),
@@ -315,6 +358,7 @@ if __name__ == '__main__':
       'vgm_to_wav': ('.vgm', '.wav'),
       'ndr_to_wav': ('.ndr.pkl', '.wav'),
       'ndf_to_wav': ('.ndf.pkl', '.wav'),
+      'nlm_to_wav': ('.nlm.pkl', '.wav'),
       'midi_to_wav': ('.mid', '.wav'),
       'exprsco_to_wav': ('.exprsco.pkl', '.wav'),
       'seprsco_to_wav': ('.seprsco.pkl', '.wav'),

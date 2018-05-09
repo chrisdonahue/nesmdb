@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+from nesmdb.apu import func_to_offset
+
 
 _DELETE = [
     'ch_dm',
@@ -22,7 +24,7 @@ _VOLATILE = [
 ]
 
 
-def ndf_to_lm(ndf):
+def ndf_to_nlm(ndf):
   func_to_val = defaultdict(int)
   func_to_val['ch_p1'] = 1
   func_to_val['ch_p2'] = 1
@@ -68,9 +70,24 @@ def ndf_to_lm(ndf):
     else:
       raise NotImplementedError()
 
-  return lm
+  # Simplify syntax
+  lm_nu = [ndf[0]]
+  for comm in lm[1:]:
+    if comm[0] == 'wait':
+      lm_nu.append(('w', comm[1]))
+    else:
+      lm_nu.append(('{}_{}'.format(comm[1], comm[2]), comm[3]))
+
+  return lm_nu
 
 
-def lm_to_ndf(lm):
-  ndf = lm
+def nlm_to_ndf(lm):
+  ndf = [lm[0]]
+  for comm in lm[1:]:
+    if comm[0] == 'w':
+      ndf.append(('wait', comm[1]))
+    else:
+      ch, fu = comm[0].split('_')
+      ndf.append(('apu', ch, fu, comm[1], -1, func_to_offset(ch, fu)))
+
   return ndf

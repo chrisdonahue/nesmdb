@@ -14,10 +14,10 @@ def _cycle_ndf(ndr):
   return ndr
 
 
-def _cycle_lm(ndr):
+def _cycle_nlm(ndr):
   ndf = nesmdb.vgm.ndr_to_ndf(ndr)
-  lm = nesmdb.vgm.ndf_to_lm(ndf)
-  ndf = nesmdb.vgm.lm_to_ndf(lm)
+  nlm = nesmdb.vgm.ndf_to_nlm(ndf)
+  ndf = nesmdb.vgm.nlm_to_ndf(nlm)
   ndr = nesmdb.vgm.ndf_to_ndr(ndf)
   return ndr
 
@@ -87,8 +87,8 @@ def vgm_cycle(vgm, representation='ndf', keep_wav=False, **kwargs):
     cycle_ndr = _cycle_ndr(source_ndr)
   elif representation == 'ndf':
     cycle_ndr = _cycle_ndf(source_ndr)
-  elif representation == 'lm':
-    cycle_ndr = _cycle_lm(source_ndr)
+  elif representation == 'nlm':
+    cycle_ndr = _cycle_nlm(source_ndr)
   elif representation == 'rawsco':
     cycle_ndr = _cycle_rawsco(source_ndr)
   elif representation == 'exprsco':
@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
 
-  parser.add_argument('representation', type=str, choices=['ndr', 'ndf', 'lm', 'rawsco', 'exprsco', 'seprsco', 'blndsco', 'midi'])
+  parser.add_argument('representation', type=str, choices=['ndr', 'ndf', 'nlm', 'rawsco', 'exprsco', 'seprsco', 'blndsco', 'midi'])
   parser.add_argument('fps', type=str, nargs='+')
   parser.add_argument('--keep_vgm', action='store_true', dest='keep_vgm')
   parser.add_argument('--keep_wav', action='store_true', dest='keep_wav')
@@ -151,7 +151,7 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  if args.representation not in ['ndr', 'ndf', 'lm', 'rawsco'] and args.score_rate is None:
+  if args.representation not in ['ndr', 'ndf', 'nlm', 'rawsco'] and args.score_rate is None:
     print 'Must specify --score_rate'
     sys.exit(1)
 

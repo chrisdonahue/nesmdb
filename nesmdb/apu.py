@@ -143,5 +143,21 @@ register_function_bitmasks = {
 register_function_bitmasks['p2'] = register_function_bitmasks['p1']
 
 
+def func_to_bitmask(ch, fu):
+  for offset, bitmasks in register_function_bitmasks[ch].items():
+    for fu_name, bitmask in bitmasks:
+      if fu_name == fu:
+        return bitmask
+  raise ValueError()
+
+
+def func_to_offset(ch, fu):
+  for offset, bitmasks in register_function_bitmasks[ch].items():
+    for fu_name, bitmask in bitmasks:
+      if fu_name == fu:
+        return offset
+  raise ValueError()
+
+
 # Number of frame counter ticks for various settings of the length counter
 length_counter_table = [10, 254, 20, 2, 40, 4, 80, 6, 160, 8, 60, 10, 14, 12, 26, 14, 12, 16, 24, 18, 48, 20, 96, 22, 192, 24, 72, 26, 16, 28, 32, 30]
