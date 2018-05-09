@@ -53,20 +53,16 @@ def ndf_to_nlm(ndf):
       funcs.add(func)
 
       delete = func in _DELETE
-      preserve = func_to_val[func] != val or func in _VOLATILE
       changed = func_to_val[func] != val
 
+      preserve = func in _VOLATILE
       if func == 'p1_tl' and (func_to_val['p1_se'] == 1):
         preserve = True
       if func == 'p2_tl' and (func_to_val['p2_se'] == 1):
         preserve = True
 
-      preserve = True
-
       if (changed or preserve) and not delete:
         lm.append(comm)
-      else:
-        pass
 
       func_to_val[func] = val
     else:
