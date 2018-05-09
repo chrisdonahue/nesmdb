@@ -25,7 +25,7 @@ def txt_to_nd(txt):
         nd.append(('apu', comm[1], comm[2]))
       else:
         # NDF
-        nd.append(('apu', comm[1], comm[2], int(comm[3]), int(comm[4])))
+        nd.append(('apu', comm[1], comm[2], int(comm[3]), int(comm[4]), int(comm[5])))
     else:
       raise NotImplementedError('Invalid command: {}'.format(comm))
 

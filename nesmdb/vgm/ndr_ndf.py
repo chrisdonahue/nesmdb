@@ -19,11 +19,11 @@ def ndr_to_ndf(ndr):
   }
 
   # Expand
-  reg_to_nwrites = Counter()
+  natoms = 0
   for comm in ndr:
     if comm[0] == 'wait':
       ndf.append(comm)
-      reg_to_nwrites = Counter()
+      natoms = 0
     elif comm[0] == 'apu':
       reg = b2c(h2b(comm[1]))
       val = b2c(h2b(comm[2]))
@@ -63,12 +63,12 @@ def ndr_to_ndf(ndr):
 
         func_val = (val & mask) >> shift
 
-        ndf.append(('apu', ch, func, func_val, reg_to_nwrites[regtup]))
+        ndf.append(('apu', ch, func, func_val, natoms, offset))
 
       # Write value to register
       ch_regs[offset] = val
       assert ch_regs[offset] < 256
-      reg_to_nwrites[regtup] += 1
+      natoms += 1
     elif comm[0] == 'ram':
       continue
     else:
@@ -163,20 +163,18 @@ def ndf_to_ndr(ndf):
       dest = comm[1]
       param = comm[2]
       val = comm[3]
-      nwrites = comm[4]
-      param_offset = None
+      natoms = comm[4]
+      param_offset = comm[5]
       param_bitmask = None
 
       # Find offset/bitmask
       reg = registers[dest]
       dest_bitmasks = register_function_bitmasks[dest]
-      for offset, bitmasks in dest_bitmasks.items():
-        for bitmask in bitmasks:
-          if bitmask[0] == param:
-            param_offset = offset
-            param_bitmask = bitmask[1]
-            break
-      assert param_offset is not None and param_bitmask is not None
+      for bitmask in dest_bitmasks[param_offset]:
+        if bitmask[0] == param:
+          param_bitmask = bitmask[1]
+          break
+      assert param_offset is not None
 
       # Apply mask
       mask_bin = '{:08b}'.format(param_bitmask)
@@ -194,7 +192,7 @@ def ndf_to_ndr(ndf):
       arg1 = register_memory_offsets[dest] + param_offset
       arg2 = reg[param_offset]
 
-      regn_to_val[(dest, param_offset, nwrites)] = (arg1, arg2)
+      regn_to_val[(dest, param_offset, natoms)] = (arg1, arg2)
     elif itype == 'ram':
       # TODO
       continue
@@ -205,5 +203,3 @@ def ndf_to_ndr(ndf):
     ndr.append(('apu', b2h(c2b(arg1)), b2h(c2b(arg2))))
 
   return ndr
-
-
