@@ -151,6 +151,13 @@ def func_to_bitmask(ch, fu):
   raise ValueError()
 
 
+def func_to_max(ch, fu):
+  bitmask = func_to_bitmask(ch, fu)
+  mask_bin = '{:08b}'.format(bitmask)
+  nbits = mask_bin.count('1')
+  return (2 ** nbits)
+
+
 def func_to_offset(ch, fu):
   for offset, bitmasks in register_function_bitmasks[ch].items():
     for fu_name, bitmask in bitmasks:
