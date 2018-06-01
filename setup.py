@@ -15,5 +15,7 @@ setup(
       'scipy >= 1.0.0',
       'Pillow >= 5.1.0',
       'tqdm >= 4.19.9',
-    ]
+    ],
+    test_suite='nose.collector',
+    tests_require=['nose >= 1.3.7']
 )
