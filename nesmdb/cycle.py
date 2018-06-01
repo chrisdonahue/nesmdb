@@ -41,13 +41,13 @@ def _cycle_exprsco(ndr, rate):
   return ndr
 
 
-def _cycle_compsco(ndr, rate):
+def _cycle_seprsco(ndr, rate):
   ndf = nesmdb.vgm.ndr_to_ndf(ndr)
   rawsco = nesmdb.score.ndf_to_rawsco(ndf)
   exprsco = nesmdb.score.rawsco_to_exprsco(rawsco)
   exprsco = nesmdb.score.exprsco_downsample(exprsco, rate, False)
-  compsco = nesmdb.score.exprsco_to_compsco(exprsco)
-  exprsco = nesmdb.score.compsco_to_exprsco(compsco)
+  seprsco = nesmdb.score.exprsco_to_seprsco(exprsco)
+  exprsco = nesmdb.score.seprsco_to_exprsco(seprsco)
   rawsco = nesmdb.score.exprsco_to_rawsco(exprsco)
   ndf = nesmdb.score.rawsco_to_ndf(rawsco)
   ndr = nesmdb.vgm.ndf_to_ndr(ndf)
@@ -80,7 +80,7 @@ def _cycle_midi(ndr, rate):
   return ndr
 
 
-def vgm_cycle(vgm, representation='ndf', keep_wav=False, **kwargs):
+def vgm_cycle(source_vgm, representation='ndf', keep_wav=False, **kwargs):
   # Cycle
   source_ndr = nesmdb.vgm.vgm_to_ndr(source_vgm)
   if representation == 'ndr':
@@ -93,8 +93,8 @@ def vgm_cycle(vgm, representation='ndf', keep_wav=False, **kwargs):
     cycle_ndr = _cycle_rawsco(source_ndr)
   elif representation == 'exprsco':
     cycle_ndr = _cycle_exprsco(source_ndr, rate=kwargs['score_rate'])
-  elif representation == 'compsco':
-    cycle_ndr = _cycle_compsco(source_ndr, rate=kwargs['score_rate'])
+  elif representation == 'seprsco':
+    cycle_ndr = _cycle_seprsco(source_ndr, rate=kwargs['score_rate'])
   elif representation == 'blndsco':
     cycle_ndr = _cycle_blndsco(source_ndr, rate=kwargs['score_rate'])
   elif representation == 'midi':
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     source_vgm, delcmds = nesmdb.vgm.vgm_simplify(vgm)
 
     try:
-      cycle_vgm = vgm_cycle(vgm, representation=args.representation, **kwargs)
+      cycle_vgm = vgm_cycle(source_vgm, representation=args.representation, **kwargs)
     except:
       print '-' * 80
       print vgm_fp
