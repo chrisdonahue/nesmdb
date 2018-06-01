@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='nesmdb',
-    version='0.1',
+    version='0.1.0',
     description='The NES Music Database (NES-MDB). Use machine learning to compose music for the Nintendo Entertainment System!',
     url='https://github.com/chrisdonahue/nesmdb',
     author='Chris Donahue',
@@ -17,5 +17,9 @@ setup(
       'tqdm >= 4.19.9',
     ],
     test_suite='nose.collector',
-    tests_require=['nose >= 1.3.7']
+    tests_require=[
+      'nose >= 1.3.7',
+      'pretty_midi >= 0.2.8',
+      'librosa >= 0.6.1',
+    ]
 )
