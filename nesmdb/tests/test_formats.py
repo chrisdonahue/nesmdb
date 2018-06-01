@@ -3,6 +3,7 @@ import os
 from unittest import TestCase
 
 from nesmdb.vgm import vgm_simplify, vgm_shorten
+import nesmdb.cycle
 
 _TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 _EXAMPLE_VGMS = sorted(glob.glob(os.path.join(_TEST_DIR, 'data', '*.vgm')))
@@ -51,3 +52,21 @@ class TestFormats(TestCase):
     self.assertListEqual(
         [len(v) for v in vgms_short],
         [3193, 3193, 1756, 1192, 3193])
+
+  def test_nlm(self):
+    total_dist = 0.
+    cycle_vgms = []
+    for source_vgm in self.vgms:
+      cycle_vgm = nesmdb.cycle.vgm_cycle(source_vgm, 'nlm')
+      total_dist += nesmdb.cycle.vgm_dist(source_vgm, cycle_vgm)[0]
+      cycle_vgms.append(cycle_vgm)
+
+    # Make sure shortened lengths are correct
+    self.assertListEqual(
+        [len(v) for v in cycle_vgms],
+        [82168, 86497, 2656, 2161, 87442])
+
+    # Make sure the WAV files are lossless
+    self.assertEqual(total_dist, 0.)
+
+

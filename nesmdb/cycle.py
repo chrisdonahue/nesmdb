@@ -82,7 +82,7 @@ def _cycle_midi(ndr, rate):
 
 def vgm_cycle(vgm, representation='ndf', keep_wav=False, **kwargs):
   # Cycle
-  source_ndr = nesmdb.vgm.vgm_to_ndr(source_vgm)
+  source_ndr = nesmdb.vgm.vgm_to_ndr(vgm)
   if representation == 'ndr':
     cycle_ndr = _cycle_ndr(source_ndr)
   elif representation == 'ndf':
