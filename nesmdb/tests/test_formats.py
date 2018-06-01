@@ -21,6 +21,7 @@ class TestFormats(TestCase):
     cls.vgms_full = vgms
     cls.vgms = vgms_simple
 
+
   def test_simplify(self):
     # Verify original lengths
     self.assertListEqual(
@@ -53,6 +54,7 @@ class TestFormats(TestCase):
         [len(v) for v in vgms_short],
         [3193, 3193, 1756, 1192, 3193])
 
+
   def test_nlm(self):
     total_dist = 0.
     cycle_vgms = []
@@ -70,3 +72,73 @@ class TestFormats(TestCase):
     self.assertEqual(total_dist, 0.)
 
 
+  def test_midi(self):
+    total_dist = 0.
+    cycle_vgms = []
+    for source_vgm in self.vgms:
+      cycle_vgm = nesmdb.cycle.vgm_cycle(source_vgm, 'midi', score_rate=24.)
+      total_dist += nesmdb.cycle.vgm_dist(source_vgm, cycle_vgm)[0]
+      cycle_vgms.append(cycle_vgm)
+
+    # Make sure shortened lengths are correct
+    self.assertListEqual(
+        [len(v) for v in cycle_vgms],
+        [12283, 16303, 1162, 1063, 15880])
+
+    # Make sure the MIDI files are the same as expressive score
+    avg_dist = total_dist / len(self.vgms)
+    self.assertTrue(2.20 < avg_dist and avg_dist < 2.24)
+
+
+  def test_exprsco(self):
+    total_dist = 0.
+    cycle_vgms = []
+    for source_vgm in self.vgms:
+      cycle_vgm = nesmdb.cycle.vgm_cycle(source_vgm, 'exprsco', score_rate=24.)
+      total_dist += nesmdb.cycle.vgm_dist(source_vgm, cycle_vgm)[0]
+      cycle_vgms.append(cycle_vgm)
+
+    # Make sure shortened lengths are correct
+    self.assertListEqual(
+        [len(v) for v in cycle_vgms],
+        [12283, 16303, 1162, 1063, 15880])
+
+    # Make sure the expressive scores are within acceptable range
+    avg_dist = total_dist / len(self.vgms)
+    self.assertTrue(2.20 < avg_dist and avg_dist < 2.24)
+
+
+  def test_seprsco(self):
+    total_dist = 0.
+    cycle_vgms = []
+    for source_vgm in self.vgms:
+      cycle_vgm = nesmdb.cycle.vgm_cycle(source_vgm, 'seprsco', score_rate=24.)
+      total_dist += nesmdb.cycle.vgm_dist(source_vgm, cycle_vgm)[0]
+      cycle_vgms.append(cycle_vgm)
+
+    # Make sure shortened lengths are correct
+    self.assertListEqual(
+        [len(v) for v in cycle_vgms],
+        [8026, 10573, 850, 790, 10330])
+
+    # Make sure the expressive scores are within acceptable range
+    avg_dist = total_dist / len(self.vgms)
+    self.assertTrue(12.40 < avg_dist and avg_dist < 12.42)
+
+
+  def test_blndsco(self):
+    total_dist = 0.
+    cycle_vgms = []
+    for source_vgm in self.vgms:
+      cycle_vgm = nesmdb.cycle.vgm_cycle(source_vgm, 'blndsco', score_rate=24.)
+      total_dist += nesmdb.cycle.vgm_dist(source_vgm, cycle_vgm)[0]
+      cycle_vgms.append(cycle_vgm)
+
+    # Make sure shortened lengths are correct
+    self.assertListEqual(
+        [len(v) for v in cycle_vgms],
+        [9589, 10630, 895, 853, 12361])
+
+    # Make sure the expressive scores are within acceptable range
+    avg_dist = total_dist / len(self.vgms)
+    self.assertTrue(11.95 < avg_dist and avg_dist < 11.97)
