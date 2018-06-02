@@ -34,6 +34,7 @@ Hover download links for SHA256 checksums.
 - `( 41 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb24_blndsco.tar.gz "d72027bdbf91fd983963136199c9d60e7b2c6dca8cd461c04bd97ca14425893d") NES-MDB [Blended Score Format](#blended-score)
 - `(155 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_nlm.tar.gz "5e37a6fe3fa3bb96c93e0d938d89df2767ddfc9d3153b6de6c11f5b9d57bd3a3") NES-MDB [Language Modeling Format](#language-modeling-format)
 - `( 31 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_vgm.tar.gz "cd44290957cd2dd22a497966f79d24d2a0cdfe135afa83857f25c0871893abc7") NES-MDB [Raw VGM Format](#raw-format)
+- `( 66 KB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_meta.pkl "a327a34e64e9809c5cdceed882d5519d99e5cdc9c206a096ccd74975c694af62") NES-MDB Composer Metadata
 
 ### MIDI format
 
