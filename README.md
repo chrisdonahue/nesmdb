@@ -165,7 +165,7 @@ The aforementioned formats are derived from the [VGM format](http://vgmrips.net/
 
 ## `nesmdb` Package Information
 
-`nesmdb` is a Python 2/3 package which can render your generated music through an emulation of the NES synthesizer. Additionally, it can convert between dataset formats or convert new VGM files into the existing formats.
+`nesmdb` is a Python 2 (support for Python 3 forthcoming) package which can render your generated music through an emulation of the NES synthesizer. Additionally, it can convert between dataset formats or convert new VGM files into the existing formats.
 
 ### Global installation
 
