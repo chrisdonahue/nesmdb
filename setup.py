@@ -9,7 +9,7 @@ setup(
     url='https://github.com/chrisdonahue/nesmdb',
     download_url='https://github.com/chrisdonahue/nesmdb/releases',
     license='MIT',
-    packages=['nesmdb', 'nesmdb.vgm'],
+    packages=['nesmdb', 'nesmdb.vgm', 'nesmdb.score'],
     keywords='music nes mir midi',
     install_requires=[
       'numpy >= 1.7.0',
