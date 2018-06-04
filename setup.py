@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='nesmdb',
-    version='0.1.1',
+    version='0.1.2',
     description='The NES Music Database (NES-MDB). Use machine learning to compose music for the Nintendo Entertainment System!',
     author='Chris Donahue',
     author_email='cdonahue@ucsd.edu',
