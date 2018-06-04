@@ -11,6 +11,7 @@ setup(
     license='MIT',
     packages=['nesmdb', 'nesmdb.vgm', 'nesmdb.score'],
     keywords='music nes mir midi',
+    python_requires='>=2.7,<3.0',
     install_requires=[
       'numpy >= 1.7.0',
       'scipy >= 1.0.0',
@@ -22,5 +23,5 @@ setup(
       'nose >= 1.3.7',
       'pretty_midi >= 0.2.8',
       'librosa >= 0.6.1',
-    ]
+    ],
 )
