@@ -172,6 +172,7 @@ The aforementioned formats are derived from the [VGM format](http://vgmrips.net/
 To install `nesmdb` globally, use the following shell script which downloads, compiles and installs [VGMPlay](https://github.com/vgmrips/vgmplay).
 
 ```sh
+# Install dependencies
 sudo apt-get install make gcc zlib1g-dev libao-dev
 
 # Download and compile VGMPlay
@@ -184,10 +185,7 @@ make
 sudo make install
 
 # Install nesmdb
-cd ~
-git clone git@github.com:chrisdonahue/nesmdb.git
-cd nesmdb
-sudo pip install -e .
+sudo pip install nesmdb
 ```
 
 ### Local installation
@@ -195,6 +193,7 @@ sudo pip install -e .
 To install `nesmdb` locally, use the following shell script to download and compile [VGMPlay](https://github.com/vgmrips/vgmplay). If you are using `virtualenv`, add the `VGMTOWAV` environment variable to your `activate` script.
 
 ```sh
+# Install dependencies
 sudo apt-get install make gcc zlib1g-dev libao-dev
 
 # Download and compile VGMPlay
@@ -205,10 +204,9 @@ make
 export VGMTOWAV=${PWD}/vgm2wav
 
 # Install nesmdb
-cd ~
-git clone git@github.com:chrisdonahue/nesmdb.git
-cd nesmdb
-pip install -e .
+virtualenv --no-site-packages -p python2.7 nes
+source nes/bin/activate
+pip install nesmdb
 ```
 
 ### Rendering audio
