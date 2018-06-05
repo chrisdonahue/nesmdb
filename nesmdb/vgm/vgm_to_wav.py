@@ -1,4 +1,5 @@
 import distutils.spawn
+import imp
 import os
 import subprocess
 import pkg_resources
@@ -26,10 +27,18 @@ def save_vgmwav(wav_fp, wav):
 
 
 def vgm_to_wav(vgm):
-  # Try to get binary fp at ${VGMTOWAV}
+  # Try to get binary fp from build dir
   bin_fp = None
   try:
-    bin_fp = os.environ['VGMTOWAV']
+    bin_dir = os.path.dirname(imp.find_module('vgmplaydummy')[1])
+    bin_fp = os.path.join(bin_dir, 'vgm2wav')
+  except:
+    pass
+
+  # Try to get binary fp at ${VGMTOWAV}
+  try:
+    env_var = os.environ['VGMTOWAV']
+    bin_fp = env_var
   except:
     pass
 
