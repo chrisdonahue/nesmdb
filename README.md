@@ -169,15 +169,7 @@ The aforementioned formats are derived from the [VGM format](http://vgmrips.net/
 
 ### Installation
 
-To install `nesmdb`, use the following shell script which downloads, compiles and installs [VGMPlay](https://github.com/vgmrips/vgmplay).
-
-```sh
-# Install dependencies
-sudo apt-get install make gcc zlib1g-dev libao-dev
-
-# Install nesmdb
-sudo pip install nesmdb
-```
+To install `nesmdb`, simply type `pip install nesmdb`. This script will download, compile, and install [VGMPlay](https://github.com/vgmrips/vgmplay) to render NES audio. Currently only tested on Ubuntu 16.04 LTS; please open an issue if build fails.
 
 ### Rendering audio
 
