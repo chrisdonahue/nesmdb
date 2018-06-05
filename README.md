@@ -175,12 +175,12 @@ To install `nesmdb`, simply type `pip install nesmdb`. This script will download
 
 Use the following commands to convert a batch of files to WAVs depending on your dataset format. If you're converting a single file, you can remove the `--out_dir` argument
 
-1. MIDI: `python -m nesmdb.convert midi_to_wav --out_dir wav *.mid`
-1. Expressive score: `python -m nesmdb.convert exprsco_to_wav --out_dir wav *.exprsco.pkl`
-1. Separated score: `python -m nesmdb.convert seprsco_to_wav --out_dir wav *.seprsco.pkl`
-1. Blended score: `python -m nesmdb.convert blndsco_to_wav --out_dir wav *.blndsco.pkl`
-1. Language modeling: `python -m nesmdb.convert nlm_to_wav --out_dir wav *.nlm.pkl`
-1. VGM: `python -m nesmdb.convert vgm_to_wav --out_dir wav *.vgm`
+1. MIDI: `nesmdb_convert midi_to_wav --out_dir wav *.mid`
+1. Expressive score: `nesmdb_convert exprsco_to_wav --out_dir wav *.exprsco.pkl`
+1. Separated score: `nesmdb_convert seprsco_to_wav --out_dir wav *.seprsco.pkl`
+1. Blended score: `nesmdb_convert blndsco_to_wav --out_dir wav *.blndsco.pkl`
+1. Language modeling: `nesmdb_convert nlm_to_wav --out_dir wav *.nlm.pkl`
+1. VGM: `nesmdb_convert vgm_to_wav --out_dir wav *.vgm`
 
 ### Ingesting new VGM files
 

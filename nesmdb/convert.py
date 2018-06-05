@@ -317,7 +317,7 @@ def blndsco_to_wav(in_fp, out_fp):
   wavwrite(out_fp, 44100, _f32_to_i16(wav))
 
 
-if __name__ == '__main__':
+def main():
   import argparse
   import os
   import sys
@@ -433,3 +433,7 @@ if __name__ == '__main__':
       print '-' * 80
       print in_fp
       traceback.print_exc()
+
+
+if __name__ == '__main__':
+  main()

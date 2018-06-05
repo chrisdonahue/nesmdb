@@ -76,7 +76,7 @@ class VGMPlayInstall(install):
 
 setup(
     name='nesmdb',
-    version='0.1.5',
+    version='0.1.6',
     description='The NES Music Database (NES-MDB). Use machine learning to compose music for the Nintendo Entertainment System!',
     author='Chris Donahue',
     author_email='cdonahue@ucsd.edu',
@@ -101,5 +101,10 @@ setup(
     cmdclass = {
       'develop': VGMPlayDevelop,
       'install': VGMPlayInstall,
+    },
+    entry_points = {
+      'console_scripts': [
+        'nesmdb_convert = nesmdb.convert:main',
+      ],
     },
 )
