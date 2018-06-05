@@ -7,7 +7,7 @@ The NES Music Database
   - [Score formats](#score-formats)
   - [Language modeling format](#language-modeling-format)
 - [`nesmdb` Python package](#nesmdb-package-information)
-  - [Installation](#global-installation)
+  - [Installation](#installation)
   - [Render audio](#rendering-audio)
 - [NES synthesizer primer](#nes-synthesizer-primer)
 - [Attribution](#attribution)
