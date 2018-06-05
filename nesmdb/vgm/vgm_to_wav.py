@@ -1,5 +1,4 @@
 import distutils.spawn
-import imp
 import os
 import subprocess
 import pkg_resources
@@ -30,7 +29,9 @@ def vgm_to_wav(vgm):
   # Try to get binary fp from build dir
   bin_fp = None
   try:
-    bin_dir = os.path.dirname(imp.find_module('vgmplaydummy')[1])
+    import nesmdb
+    import inspect
+    bin_dir = os.path.dirname(inspect.getfile(nesmdb))
     bin_fp = os.path.join(bin_dir, 'vgm2wav')
   except:
     pass

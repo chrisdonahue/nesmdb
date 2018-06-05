@@ -167,46 +167,16 @@ The aforementioned formats are derived from the [VGM format](http://vgmrips.net/
 
 `nesmdb` is a Python 2 (support for Python 3 forthcoming) package which can render your generated music through an emulation of the NES synthesizer. Additionally, it can convert between dataset formats or convert new VGM files into the existing formats.
 
-### Global installation
+### Installation
 
-To install `nesmdb` globally, use the following shell script which downloads, compiles and installs [VGMPlay](https://github.com/vgmrips/vgmplay).
+To install `nesmdb`, use the following shell script which downloads, compiles and installs [VGMPlay](https://github.com/vgmrips/vgmplay).
 
 ```sh
 # Install dependencies
 sudo apt-get install make gcc zlib1g-dev libao-dev
-
-# Download and compile VGMPlay
-wget https://github.com/vgmrips/vgmplay/archive/0.40.8.tar.gz
-tar xvfz 0.40.8.tar.gz
-cd vgmplay-0.40.8/VGMPlay
-cp Makefile Makefile.old
-sed -i "255i \\\tinstall -m 755 vgm2wav \$(DESTDIR)\$(PREFIX)/bin/vgm2wav" Makefile
-make
-sudo make install
 
 # Install nesmdb
 sudo pip install nesmdb
-```
-
-### Local installation
-
-To install `nesmdb` locally, use the following shell script to download and compile [VGMPlay](https://github.com/vgmrips/vgmplay). If you are using `virtualenv`, add the `VGMTOWAV` environment variable to your `activate` script.
-
-```sh
-# Install dependencies
-sudo apt-get install make gcc zlib1g-dev libao-dev
-
-# Download and compile VGMPlay
-wget https://github.com/vgmrips/vgmplay/archive/0.40.8.tar.gz
-tar xvfz 0.40.8.tar.gz
-cd vgmplay-0.40.8/VGMPlay
-make
-export VGMTOWAV=${PWD}/vgm2wav
-
-# Install nesmdb
-virtualenv --no-site-packages -p python2.7 nes
-source nes/bin/activate
-pip install nesmdb
 ```
 
 ### Rendering audio

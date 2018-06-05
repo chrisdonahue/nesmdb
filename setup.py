@@ -1,6 +1,6 @@
 from setuptools import setup
-from setuptools.extension import Extension
-from setuptools.command.build_ext import build_ext
+from setuptools.command.install import install
+from setuptools.command.develop import develop
 
 import os
 import shutil
@@ -9,58 +9,66 @@ import tarfile
 import urllib
 
 
-_dummy_extension = Extension('vgmplaydummy', sources=[])
+def _build_vgm_play(build_temp, build_lib):
+  # Get temp dir
+  made_build_temp = False
+  if not os.path.isdir(build_temp):
+    os.makedirs(build_temp)
+    made_build_temp = True
 
+  # Download VGMPlay 0.40.8
+  print 'Downloading VGMPlay'
+  tgz_filepath = os.path.join(build_temp, '0.40.8.tar.gz')
+  urllib.urlretrieve(
+      'https://github.com/vgmrips/vgmplay/archive/0.40.8.tar.gz',
+      tgz_filepath)
 
-class BuildVGMPlay(build_ext, object):
-  def build_extension(self, ext):
-    super(BuildVGMPlay, self).build_extension(ext)
+  # Extract
+  print 'Extracting VGMPlay'
+  with tarfile.open(tgz_filepath, 'r:gz') as f:
+    f.extractall(build_temp)
+  vgmplay_dir = os.path.join(build_temp, 'vgmplay-0.40.8', 'VGMPlay')
+  if not os.path.isdir(vgmplay_dir):
+    raise Exception('Could not extract VGMPlay')
 
-    # Get temp dir
-    build_temp = self.build_temp
-    if not os.path.isdir(build_temp):
-      os.makedirs(build_temp)
+  # Build
+  print 'Building VGMPlay'
+  command = 'make -C {} vgm2wav'.format(vgmplay_dir)
+  res = subprocess.call(command.split())
+  if res > 0:
+    raise Exception('Error building VGMPlay')
 
-    # Download VGMPlay 0.40.8
-    print 'Downloading VGMPlay'
-    tgz_filepath = os.path.join(self.build_temp, '0.40.8.tar.gz')
-    urllib.urlretrieve(
-        'https://github.com/vgmrips/vgmplay/archive/0.40.8.tar.gz',
-        tgz_filepath)
+  # Copy binary to build dir
+  bin_fp = os.path.join(vgmplay_dir, 'vgm2wav')
+  if not os.path.isfile(bin_fp):
+    raise Exception('Could not find binary')
+  shutil.copy(bin_fp, build_lib)
 
-    # Extract
-    print 'Extracting VGMPlay'
-    with tarfile.open(tgz_filepath, 'r:gz') as f:
-      f.extractall(build_temp)
-    vgmplay_dir = os.path.join(build_temp, 'vgmplay-0.40.8', 'VGMPlay')
-    if not os.path.isdir(vgmplay_dir):
-      raise Exception('Could not extract VGMPlay')
-
-    # Build
-    print 'Building VGMPlay'
-    command = 'make -C {} vgm2wav'.format(vgmplay_dir)
-    res = subprocess.call(command.split())
-    if res > 0:
-      raise Exception('Error building VGMPlay')
-
-    # Get build dir
-    import imp
-    build_lib = os.path.dirname(imp.find_module('vgmplaydummy')[1])
-
-    # Copy binary to build dir
-    bin_fp = os.path.join(vgmplay_dir, 'vgm2wav')
-    if not os.path.isfile(bin_fp):
-      raise Exception('Could not find binary')
-    shutil.copy(bin_fp, build_lib)
-
-    # Cleanup
+  # Cleanup
+  if made_build_temp:
+    shutil.rmtree(build_temp)
+  else:
     os.remove(tgz_filepath)
     shutil.rmtree(os.path.join(build_temp, 'vgmplay-0.40.8'))
 
 
+class VGMPlayDevelop(develop):
+  def run(self):
+    develop.run(self)
+    install_dir = os.path.join(self.install_dir, 'nesmdb')
+    _build_vgm_play('/tmp/build_vgmplay', install_dir)
+
+
+class VGMPlayInstall(install):
+  def run(self):
+    install.run(self)
+    install_dir = os.path.join(self.install_lib, 'nesmdb')
+    _build_vgm_play('/tmp/build_vgmplay', install_dir)
+
+
 setup(
     name='nesmdb',
-    version='0.1.3',
+    version='0.1.4',
     description='The NES Music Database (NES-MDB). Use machine learning to compose music for the Nintendo Entertainment System!',
     author='Chris Donahue',
     author_email='cdonahue@ucsd.edu',
@@ -82,6 +90,8 @@ setup(
       'pretty_midi >= 0.2.8',
       'librosa >= 0.6.1',
     ],
-    cmdclass = {'build_ext': BuildVGMPlay},
-    ext_modules = [_dummy_extension],
+    cmdclass = {
+      'develop': VGMPlayDevelop,
+      'install': VGMPlayInstall
+    },
 )
