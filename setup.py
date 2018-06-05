@@ -31,6 +31,14 @@ def _build_vgm_play(build_temp, build_lib):
   if not os.path.isdir(vgmplay_dir):
     raise Exception('Could not extract VGMPlay')
 
+  # Modify makefile
+  makefile_fp = os.path.join(vgmplay_dir, 'Makefile')
+  with open(makefile_fp, 'r') as f:
+    makefile = f.read()
+  makefile = makefile.replace('USE_LIBAO = 1', '#USE_LIBAO = 1')
+  with open(makefile_fp, 'w') as f:
+    f.write(makefile)
+
   # Build
   print 'Building VGMPlay'
   command = 'make -C {} vgm2wav'.format(vgmplay_dir)
@@ -68,7 +76,7 @@ class VGMPlayInstall(install):
 
 setup(
     name='nesmdb',
-    version='0.1.4',
+    version='0.1.5',
     description='The NES Music Database (NES-MDB). Use machine learning to compose music for the Nintendo Entertainment System!',
     author='Chris Donahue',
     author_email='cdonahue@ucsd.edu',
@@ -92,6 +100,6 @@ setup(
     ],
     cmdclass = {
       'develop': VGMPlayDevelop,
-      'install': VGMPlayInstall
+      'install': VGMPlayInstall,
     },
 )
