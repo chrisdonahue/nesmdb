@@ -99,6 +99,7 @@ def exprsco_downsample(exprsco, rate, adaptive):
     rate = float(rate_errors[0][0])
 
   # Downsample
+  rate = float(rate)
   ndown = int((nsamps / 44100.) * rate)
   score_low = np.zeros((ndown, 4, 3), dtype=np.uint8)
   for i in xrange(ndown):
