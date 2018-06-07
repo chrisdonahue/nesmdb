@@ -209,7 +209,6 @@ wav = nlm_to_wav(nlm)
 #### VGM
 
 ```py
-import pickle
 from nesmdb.convert import vgm_to_wav
 with open('train/297_SkyKid_00_01StartMusicBGMIntroBGM.vgm', 'rb') as f:
   vgm = f.read()
