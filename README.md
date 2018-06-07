@@ -42,6 +42,8 @@ The [MIDI](https://en.wikipedia.org/wiki/MIDI#Standard_files) file format stores
 
 Each MIDI file consists of four instrument voices: `P1`, `P2`, `TR`, and `NO`. Each voice contains a timestamped list of MIDI note events. All voices except for `TR` contain additional timestamped lists of MIDI control change events representing velocity (`CC11`) and timbre (`CC12`) information. 
 
+[Click here for an IPython notebook exploring the MIDI version of NES-MDB](https://colab.research.google.com/drive/1oN1g4-quvs-2GIDAff8pVOaCh_Dg-cWe)
+
 Example source code for loading an NES-MDB MIDI with [`pretty_midi`](https://github.com/craffel/pretty-midi):
 
 ```py
