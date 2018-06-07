@@ -46,7 +46,7 @@ def vgm_to_wav(vgm):
   # Make sure it is accessible
   if bin_fp is not None:
     if not (os.path.isfile(bin_fp) and os.access(bin_fp, os.X_OK)):
-      raise Exception('$VGMTOWAV is set but value \'{}\' does not exist or is not executable'.format(bin_fp))
+      raise Exception('vgm2wav should be at \'{}\' but it does not exist or is not executable'.format(bin_fp))
 
   # Try finding it on global path otherwise
   if bin_fp is None:

@@ -173,9 +173,54 @@ To install `nesmdb`, simply type `pip install nesmdb`. This script will download
 
 ### Rendering audio
 
-Use the following commands to convert a batch of files to WAVs depending on your dataset format. If you're converting a single file, you can remove the `--out_dir` argument
+Use the following code to convert an song to a WAV depending on your dataset format.
 
-- MIDI: `nesmdb_convert midi_to_wav --out_dir wav *.mid`
+#### MIDI
+
+```py
+from nesmdb.convert import midi_to_wav
+with open('train/297_SkyKid_00_01StartMusicBGMIntroBGM.mid', 'rb') as f:
+  mid = f.read()
+# Quantizes MIDI to 100Hz before rendering
+# Can set to None to avoid quantization but will take more time/memory
+wav = midi_to_wav(mid, midi_to_wav_rate=100)
+```
+
+#### Scores (expressive, separated, blended)
+
+```py
+import pickle
+from nesmdb.convert import exprsco_to_wav
+with open('train/297_SkyKid_00_01StartMusicBGMIntroBGM.exprsco.pkl', 'rb') as f:
+  exprsco = pickle.load(f)
+wav = exprsco_to_wav(exprsco)
+```
+
+#### Language modeling
+
+```py
+import pickle
+from nesmdb.convert import nlm_to_wav
+with open('train/297_SkyKid_00_01StartMusicBGMIntroBGM.nlm.pkl', 'rb') as f:
+  nlm = pickle.load(f)
+wav = nlm_to_wav(nlm)
+```
+
+#### VGM
+
+```py
+import pickle
+from nesmdb.convert import vgm_to_wav
+with open('train/297_SkyKid_00_01StartMusicBGMIntroBGM.vgm', 'rb') as f:
+  vgm = f.read()
+wav = vgm_to_wav(vgm)
+```
+
+#### Batch rendering
+
+Use the following commands to convert a batch of files to WAVs from the command line. If you're converting a single file, you can remove the `--out_dir` argument
+
+- MIDI: `nesmdb_convert midi_to_wav --out_dir wav --midi_to_wav_rate 100 *.mid`
 - Expressive score: `nesmdb_convert exprsco_to_wav --out_dir wav *.exprsco.pkl`
 - Separated score: `nesmdb_convert seprsco_to_wav --out_dir wav *.seprsco.pkl`
 - Blended score: `nesmdb_convert blndsco_to_wav --out_dir wav *.blndsco.pkl`
