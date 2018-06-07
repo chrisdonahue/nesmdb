@@ -173,7 +173,7 @@ To install `nesmdb`, simply type `pip install nesmdb`. This script will download
 
 ### Rendering audio
 
-Use the following code to convert an song to a WAV depending on your dataset format.
+Use the following code to convert an song to a WAV depending on your dataset format. In all cases, the result will be a one-dimensional Numpy array containing the audio samples in floating point at 44.1kHz.
 
 #### MIDI
 
