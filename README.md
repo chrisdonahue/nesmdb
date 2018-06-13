@@ -296,7 +296,7 @@ Below is a high-level description of the 38 functions in the NLM format. This is
 
 ## Attribution
 
-If you use this dataset or code in your research, cite [our paper](https://arxiv.org/abs/1806.04278) the following BibTeX
+If you use this dataset or code in your research, cite [our paper](https://arxiv.org/abs/1806.04278) via the following BibTeX
 
 ```
 @inproceedings{donahue2018nesmdb,
