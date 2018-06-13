@@ -12,7 +12,7 @@ The NES Music Database
 - [NES synthesizer primer](#nes-synthesizer-primer)
 - [Attribution](#attribution)
 
-The Nintendo Entertainment System Music Database (NES-MDB) is a dataset intended for building automatic music composition systems for the NES audio synthesizer. The NES synthesizer has highly constrained compositional parameters which are well-suited to a wide variety of current machine learning techniques. The synthesizer is typically programmed in [assembly](https://wiki.nesdev.com/w/index.php/APU), but we parse the assembly into straightforward formats that are more suitable for machine learning.
+The Nintendo Entertainment System Music Database (NES-MDB) is a dataset intended for building automatic music composition systems for the NES audio synthesizer ([paper](https://arxiv.org/abs/1806.04278)). The NES synthesizer has highly constrained compositional parameters which are well-suited to a wide variety of current machine learning techniques. The synthesizer is typically programmed in [assembly](https://wiki.nesdev.com/w/index.php/APU), but we parse the assembly into straightforward formats that are more suitable for machine learning.
 
 This repository contains dataset information as well as `nesmdb`, a Python package that can be used to render your generated music through the NES synthesizer. **You only need to [install](#package-installation) the `nesmdb` package if you want to listen to your generated results.** Otherwise, you may simply [download](#download-links) an appropriate format of the dataset.
 
@@ -296,11 +296,11 @@ Below is a high-level description of the 38 functions in the NLM format. This is
 
 ## Attribution
 
-If you use this dataset or code in your research, cite via the following BibTeX
+If you use this dataset or code in your research, cite [our paper](https://arxiv.org/abs/1806.04278) the following BibTeX
 
 ```
 @inproceedings{donahue2018nesmdb,
-  title={The NES Music Database: A symbolic music dataset with expressive performance attributes},
+  title={The NES Music Database: A multi-instrumental dataset with expressive performance attributes},
   author={Donahue, Chris and Mao, Huanru Henry and McAuley, Julian},
   booktitle={ISMIR},
   year={2018}
