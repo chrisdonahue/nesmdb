@@ -1,3 +1,4 @@
+from __future__ import print_function
 import cPickle as pickle
 import os
 
@@ -294,7 +295,7 @@ def main():
     out_fps = [os.path.join(args.out_dir, fn) for fn in out_fns]
 
     if os.path.exists(args.out_dir):
-      print 'WARNING: Output directory {} already exists'.format(args.out_dir)
+      print('WARNING: Output directory {} already exists'.format(args.out_dir))
     else:
       os.makedirs(args.out_dir)
 
@@ -324,8 +325,8 @@ def main():
     try:
       out_file = globals()[args.conversion](in_file, **kwargs)
     except:
-      print '-' * 80
-      print in_fp
+      print('-' * 80)
+      print(in_fp)
       traceback.print_exc()
       continue
 

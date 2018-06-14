@@ -5,6 +5,11 @@ from scipy.stats import mode
 
 import nesmdb.apu
 
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 
 fs = 44100.
 dt = 1. / fs

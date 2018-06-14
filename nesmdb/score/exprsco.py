@@ -4,6 +4,11 @@ import math
 import numpy as np
 from scipy.stats import mode
 
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 
 def rawsco_to_exprsco(rawsco, midi_valid_range=(21, 108)):
   clock, rate, nsamps, rawsco = rawsco

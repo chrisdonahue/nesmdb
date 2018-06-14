@@ -2,6 +2,11 @@ from collections import defaultdict
 import numpy as np
 import tempfile
 
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 
 def exprsco_to_midi(exprsco):
   import pretty_midi

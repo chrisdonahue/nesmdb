@@ -1,5 +1,10 @@
 import numpy as np
 
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 
 def exprsco_to_blndsco(exprsco):
   rate, nsamps, score = exprsco
