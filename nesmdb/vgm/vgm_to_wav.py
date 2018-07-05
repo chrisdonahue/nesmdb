@@ -65,7 +65,7 @@ def vgm_to_wav(vgm):
   res = subprocess.call('{} --loop-count 1 {} {}'.format(bin_fp, vf.name, wf.name).split())
   if res > 0:
     vf.close()
-    wv.close()
+    wf.close()
     raise Exception('Invalid return code {} from vgm2wav'.format(res))
 
   vf.close()
