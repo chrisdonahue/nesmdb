@@ -17,14 +17,14 @@ def _build_vgm_play(build_temp, build_lib):
     made_build_temp = True
 
   # Download VGMPlay 0.40.8
-  print 'Downloading VGMPlay'
+  print('Downloading VGMPlay')
   tgz_filepath = os.path.join(build_temp, '0.40.8.tar.gz')
   urllib.urlretrieve(
       'https://github.com/vgmrips/vgmplay/archive/0.40.8.tar.gz',
       tgz_filepath)
 
   # Extract
-  print 'Extracting VGMPlay'
+  print('Extracting VGMPlay')
   with tarfile.open(tgz_filepath, 'r:gz') as f:
     f.extractall(build_temp)
   vgmplay_dir = os.path.join(build_temp, 'vgmplay-0.40.8', 'VGMPlay')
@@ -40,7 +40,7 @@ def _build_vgm_play(build_temp, build_lib):
     f.write(makefile)
 
   # Build
-  print 'Building VGMPlay'
+  print('Building VGMPlay')
   command = 'make -C {} vgm2wav'.format(vgmplay_dir)
   res = subprocess.call(command.split())
   if res > 0:
