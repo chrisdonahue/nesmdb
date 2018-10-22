@@ -69,7 +69,7 @@ The three score formats are [piano roll](https://en.wikipedia.org/wiki/Piano_rol
 
 <p align="center"><img src="static/score_expressive.png" width="400"/></p>
 <p align="center"><img src="static/score_dimensionality.png" width="400"/></p>
-<p align="center"><b>Depiction and dimensionality of the expressive score format</b></p>
+<p align="center"><b>Depiction and dimensionality of the expressive score format (all values are discrete).</b></p>
 
 The *expressive score* format contains all of the information that the NES synthesizer needs to render the music at each timestep. Each song is represented as an `numpy.uint8` array of size `Nx4x3`, where `N` is the number of timesteps at 24 Hz. There are `4` synthesis voices, and each has a state of `3` bytes per timestep consisting of note, velocity and timbral information. The above table displays the possible values for each of the instrument voices. The triangle voice only uses note information and will always take value `0` for velocity and timbre.
 
