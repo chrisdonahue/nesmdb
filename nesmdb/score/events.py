@@ -10,6 +10,8 @@ def rawsco_to_events(rawsco):
   ch_to_vol = {'p1': 0, 'p2': 0, 'no': 0}
   ch_to_timbre = {'p1': 0, 'p2': 0, 'no': 0}
   ch_to_sweep = {'p1': (0, 0, 0, 0), 'p2': (0, 0, 0, 0)}
+  # Handling rawsco edge case where initial t11 value is set one sample *after* starting the sweep
+  ch_to_sweep_enable_hist = {'p1': 0, 'p2': 0}
   last_update = 0
   totwaits = 0
 
@@ -21,7 +23,7 @@ def rawsco_to_events(rawsco):
       timer = (rawsco[samp, i, 0] << 8) + rawsco[samp, i, 1]
       if timer != ch_to_timer[ch]:
         if ch == 'p1' or ch == 'p2':
-          if ch_to_sweep[ch][0] == 0:
+          if ch_to_sweep[ch][0] == 0 or ch_to_sweep_enable_hist[ch] == 1:
             new_events.append((ch, 'perd', timer))
         else:
           new_events.append((ch, 'perd', timer))
@@ -30,7 +32,7 @@ def rawsco_to_events(rawsco):
       if ch != 'tr':
         # Volume changes
         vol = rawsco[samp, i, 2]
-        if vol != ch_to_vol[ch] and (ch == 'no' or ch_to_sweep[ch][0] == 0):
+        if vol != ch_to_vol[ch]:
           if vol == 0 and (len(new_events) == 0 or new_events[-1] != (ch, 'perd', 0)):
             new_events.append((ch, 'perd', 0))
           new_events.append((ch, 'volu', vol))
@@ -44,13 +46,14 @@ def rawsco_to_events(rawsco):
 
       # Sweep changes
       if ch == 'p1' or ch == 'p2':
+        ch_sweep = (0, 0, 0, 0)
         if samp in sweeps[ch]:
           ch_sweep = sweeps[ch][samp]
           if ch_sweep != ch_to_sweep[ch]:
-            # If we're switching sweep enable
-            if ch_to_sweep[ch][0] != ch_sweep[0]:
-              new_events.append((ch, 'swep') + ch_sweep)
+            new_events.append((ch, 'swep') + ch_sweep)
             ch_to_sweep[ch] = ch_sweep
+
+        ch_to_sweep_enable_hist[ch] = ch_sweep[0]
 
         if samp in sweeps_overrides[ch]:
           assert ch_to_sweep[ch][0] == 1
@@ -66,9 +69,6 @@ def rawsco_to_events(rawsco):
 
   if nsamps - last_update > 0:
     events.append(('w', nsamps - last_update))
-
-  for event in events:
-    print event
 
   return events
 
