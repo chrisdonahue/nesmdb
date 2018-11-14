@@ -70,45 +70,126 @@ def rawsco_to_events(rawsco):
   return events
 
 
-def events_to_rawsco(events):
+def events_to_ndf(events):
   clock = events[0][1]
   events = events[1:]
 
-  nsamps = sum([w[1] for w in filter(lambda x: x[0] == 'w', events)])
-  rate = 44100
+  ch_names = ['p1', 'p2', 'tr', 'no']
 
-  rawsco = np.zeros((nsamps, 4, 4), dtype=np.uint8)
-  ch_to_timer = {'p1': 0, 'p2': 0, 'tr': 0, 'no': 0}
-  ch_to_sweep = {'p1': (0, 0, 0, 0), 'p2': (0, 0, 0, 0)}
-  sweeps = {'p1': {}, 'p2': {}}
-  sweeps_overrides = {'p1': {}, 'p2': {}}
+  # ('apu', ch, func, func_val, which command this wait, which register of 4)
+  ndf = [
+      ('clock', int(clock)),
+      ('apu', 'ch', 'p1', 0, 0, 0),
+      ('apu', 'ch', 'p2', 0, 0, 0),
+      ('apu', 'ch', 'tr', 0, 0, 0),
+      ('apu', 'ch', 'no', 0, 0, 0),
+      ('apu', 'p1', 'du', 0, 1, 0),
+      ('apu', 'p1', 'lh', 1, 1, 0),
+      ('apu', 'p1', 'cv', 1, 1, 0),
+      ('apu', 'p1', 'vo', 0, 1, 0),
+      ('apu', 'p1', 'ss', 7, 2, 1), # This is necessary to prevent channel silence for low notes
+      ('apu', 'p2', 'du', 0, 3, 0),
+      ('apu', 'p2', 'lh', 1, 3, 0),
+      ('apu', 'p2', 'cv', 1, 3, 0),
+      ('apu', 'p2', 'vo', 0, 3, 0),
+      ('apu', 'p2', 'ss', 7, 4, 1), # This is necessary to prevent channel silence for low notes
+      ('apu', 'tr', 'lh', 1, 5, 0),
+      ('apu', 'tr', 'lr', 127, 5, 0),
+      ('apu', 'no', 'lh', 1, 6, 0),
+      ('apu', 'no', 'cv', 1, 6, 0),
+      ('apu', 'no', 'vo', 0, 6, 0),
+  ]
+  ch_to_last_t11 = {ch:0 for ch in ['p1', 'p2', 'tr']}
+  ch_to_last_tl = {ch:0 for ch in ['p1', 'p2', 'tr']}
+  ch_to_last_th = {ch:0 for ch in ['p1', 'p2', 'tr']}
+  ch_to_sweeping = {'p1': False, 'p2': False}
+  last_no_np = 0
 
-  samp = 0
   for event in events:
     if event[0] == 'w':
       w_nsamps = event[1]
-      rawsco[samp:samp+w_nsamps] = rawsco[samp][np.newaxis]
-      samp += w_nsamps
+      ndf.append(('wait', w_nsamps))
     else:
       ch, event_type = event[0:2]
-      ch_id = ['p1', 'p2', 'tr', 'no'].index(ch)
+      ch_id = ch_names.index(ch)
 
-      if event_type == 'perd':
+      # Handle complex timer change events for p1/p2/tr
+      if event_type == 'perd' and ch != 'no':
         t11 = event[2]
-        ch_to_timer[ch] = t11
         th = (t11 & 0b11100000000) >> 8
         tl = (t11 & 0b00011111111)
-        rawsco[samp, ch_id, 0] = th
-        rawsco[samp, ch_id, 1] = tl
-        if ch == 'p1' or ch == 'p2' and ch_to_sweep[ch][0] == 1:
-          sweeps_overrides[ch][samp] = t11
-      elif event_type == 'volu':
-        rawsco[samp, ch_id, 2] = event[2]
-      elif event_type == 'tmbr':
-        rawsco[samp, ch_id, 3] = event[2]
-      else:
-        sweep = event[2:]
-        ch_to_sweep[ch] = sweep
-        sweeps[ch][samp] = sweep
+        last_t11 = ch_to_last_t11[ch]
+        last_th = ch_to_last_th[ch]
+        last_tl = ch_to_last_tl[ch]
 
-  return (clock, rate, nsamps, rawsco, sweeps, sweeps_overrides)
+        retrigger = False
+        sweeping = False if ch == 'tr' else ch_to_sweeping[ch]
+        if last_t11 == 0 and t11 != 0:
+          ndf.append(('apu', 'ch', ch, 1, 0, 0))
+          retrigger = True
+        elif last_t11 != 0 and t11 == 0:
+          ndf.append(('apu', 'ch', ch, 0, 0, 0))
+
+        if sweeping or tl != last_tl:
+          ndf.append(('apu', ch, 'tl', tl, 0, 2))
+        if sweeping or retrigger or th != ch_to_last_th[ch]:
+          ndf.append(('apu', ch, 'th', th, 0, 3))
+          ch_to_last_th[ch] = th
+
+        ch_to_last_t11[ch] = t11
+        ch_to_last_th[ch] = th
+        ch_to_last_tl[ch] = tl
+
+      # Handle other event types for all channels
+      if ch == 'p1' or ch == 'p2':
+        if event_type == 'perd':
+          pass
+        elif event_type == 'volu':
+          ndf.append(('apu', ch, 'vo', event[2], 0, 0))
+        elif event_type == 'tmbr':
+          ndf.append(('apu', ch, 'du', event[2], 0, 0))
+        elif event_type == 'swep':
+          se, sp, sn, ss = event[2:]
+          sweeping = bool(se)
+          if sweeping:
+            ndf.append(('apu', ch, 'se', 1, 0, 1))
+            ndf.append(('apu', ch, 'sp', sp, 0, 1))
+            ndf.append(('apu', ch, 'sn', sn, 0, 1))
+            ndf.append(('apu', ch, 'ss', ss, 0, 1))
+          else:
+            ndf.append(('apu', ch, 'se', 0, 0, 1))
+            ndf.append(('apu', ch, 'sp', 0, 0, 1))
+            ndf.append(('apu', ch, 'sn', 1, 0, 1))
+            ndf.append(('apu', ch, 'ss', 7, 0, 1))
+          ch_to_sweeping[ch] = sweeping
+        else:
+          raise ValueError()
+      elif ch == 'tr':
+        if event_type == 'perd':
+          pass
+        else:
+          raise ValueError()
+      elif ch == 'no':
+        if event_type == 'perd':
+          no_np = event[2]
+          retrigger = False
+          if last_no_np == 0 and no_np != 0:
+            ndf.append(('apu', 'ch', 'no', 1, 0, 0))
+            retrigger = True
+          else:
+            ndf.append(('apu', 'ch', 'no', 0, 0, 0))
+          last_no_np = no_np
+
+          if retrigger:
+            ndf.append(('apu', 'no', 'np', no_np, 0, 2))
+            ndf.append(('apu', 'no', 'll', 0, 0, 3))
+        elif event_type == 'volu':
+          ndf.append(('apu', 'no', 'vo', event[2], 0, 0))
+        elif event_type == 'tmbr':
+          ndf.append(('apu', 'no', 'nl', event[2], 0, 2))
+        else:
+          raise ValueError()
+      else:
+        raise ValueError()
+
+  return ndf
