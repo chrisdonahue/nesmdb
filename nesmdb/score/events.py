@@ -67,6 +67,9 @@ def rawsco_to_events(rawsco):
   if nsamps - last_update > 0:
     events.append(('w', nsamps - last_update))
 
+  for event in events:
+    print event
+
   return events
 
 
@@ -176,13 +179,14 @@ def events_to_ndf(events):
           if last_no_np == 0 and no_np != 0:
             ndf.append(('apu', 'ch', 'no', 1, 0, 0))
             retrigger = True
-          else:
+          elif last_no_np != 0 and no_np == 0:
             ndf.append(('apu', 'ch', 'no', 0, 0, 0))
-          last_no_np = no_np
 
-          if retrigger:
-            ndf.append(('apu', 'no', 'np', no_np, 0, 2))
+          if no_np > 0 and no_np != last_no_np:
+            ndf.append(('apu', 'no', 'np', 16 - no_np, 0, 2))
             ndf.append(('apu', 'no', 'll', 0, 0, 3))
+
+          last_no_np = no_np
         elif event_type == 'volu':
           ndf.append(('apu', 'no', 'vo', event[2], 0, 0))
         elif event_type == 'tmbr':
