@@ -73,6 +73,7 @@ def ndf_to_rawsco(ndf):
   ch_to_midi = {'p1': 0, 'p2': 0, 'tr': 0, 'no': 0}
   rawsco = np.zeros((nsamps, 4, 4), dtype=np.uint8)
   sweeps = {'p1': {}, 'p2': {}}
+  sweeps_overrides = {'p1': {}, 'p2': {}}
 
   # Set up function to sweep
   def sweep(ch):
@@ -181,11 +182,15 @@ def ndf_to_rawsco(ndf):
         ch_to_timer[ch] &= 0b00011111111
         ch_to_timer[ch] |= (val << 8)
         if ch == 'p1' or ch == 'p2':
+          if ch_to_se[ch] == 1:
+            sweeps_overrides[ch][samp] = ch_to_timer[ch]
           sweep(ch)
       elif fu == 'tl':
         ch_to_timer[ch] &= 0b11100000000
         ch_to_timer[ch] |= val
         if ch == 'p1' or ch == 'p2':
+          if ch_to_se[ch] == 1:
+            sweeps_overrides[ch][samp] = ch_to_timer[ch]
           sweep(ch)
       elif fu == 'll':
         if ch_to_status[ch] == 1:
@@ -244,11 +249,11 @@ def ndf_to_rawsco(ndf):
         rawsco[samp, 3, 2] = vo
     rawsco[samp, 3, 3] = no_nl
 
-  return (clock, 44100, nsamps, rawsco, sweeps)
+  return (clock, 44100, nsamps, rawsco, sweeps, sweeps_overrides)
 
 
 def rawsco_to_ndf(rawsco):
-  clock, rate, nsamps, score, sweeps = rawsco
+  clock, rate, nsamps, score, sweeps, sweeps_overrides = rawsco
 
   if rate == 44100:
     ar = True

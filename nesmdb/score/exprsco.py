@@ -6,7 +6,7 @@ from scipy.stats import mode
 
 
 def rawsco_to_exprsco(rawsco, midi_valid_range=(21, 108)):
-  clock, rate, nsamps, rawsco, sweeps = rawsco
+  clock, rate, nsamps, rawsco, sweeps, sweeps_overrides = rawsco
   assert rate == 44100
   assert rawsco.shape[0] == nsamps
 
@@ -146,4 +146,4 @@ def exprsco_to_rawsco(exprsco, clock=1789773.):
   rawsco[:, :3, 1] = tl
   rawsco[:, 3, 1:] = exprsco[:, 3, :]
 
-  return (clock, rate, nsamps, rawsco, None)
+  return (clock, rate, nsamps, rawsco, None, None)
