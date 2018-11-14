@@ -72,6 +72,7 @@ def ndf_to_rawsco(ndf):
   # Set up score state
   ch_to_midi = {'p1': 0, 'p2': 0, 'tr': 0, 'no': 0}
   rawsco = np.zeros((nsamps, 4, 4), dtype=np.uint8)
+  sweeps = {'p1': {}, 'p2': {}}
 
   # Set up function to sweep
   def sweep(ch):
@@ -166,12 +167,16 @@ def ndf_to_rawsco(ndf):
         ch_to_se[ch] = val
         ch_to_swe_write[ch] = True
         sweep(ch)
+        sweeps[ch][samp] = (ch_to_se[ch], ch_to_sp[ch], ch_to_sn[ch], ch_to_ss[ch])
       elif fu == 'sp':
         ch_to_sp[ch] = val
+        sweeps[ch][samp] = (ch_to_se[ch], ch_to_sp[ch], ch_to_sn[ch], ch_to_ss[ch])
       elif fu == 'sn':
         ch_to_sn[ch] = val
+        sweeps[ch][samp] = (ch_to_se[ch], ch_to_sp[ch], ch_to_sn[ch], ch_to_ss[ch])
       elif fu == 'ss':
         ch_to_ss[ch] = val
+        sweeps[ch][samp] = (ch_to_se[ch], ch_to_sp[ch], ch_to_sn[ch], ch_to_ss[ch])
       elif fu == 'th':
         ch_to_timer[ch] &= 0b00011111111
         ch_to_timer[ch] |= (val << 8)
@@ -239,11 +244,11 @@ def ndf_to_rawsco(ndf):
         rawsco[samp, 3, 2] = vo
     rawsco[samp, 3, 3] = no_nl
 
-  return (clock, 44100, nsamps, rawsco)
+  return (clock, 44100, nsamps, rawsco, sweeps)
 
 
 def rawsco_to_ndf(rawsco):
-  clock, rate, nsamps, score = rawsco
+  clock, rate, nsamps, score, sweeps = rawsco
 
   if rate == 44100:
     ar = True
