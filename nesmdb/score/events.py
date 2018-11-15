@@ -56,7 +56,6 @@ def rawsco_to_events(rawsco):
         ch_to_sweep_enable_hist[ch] = ch_sweep[0]
 
         if samp in sweeps_overrides[ch]:
-          assert ch_to_sweep[ch][0] == 1
           new_events.append((ch, 'perd', sweeps_overrides[ch][samp]))
 
     if len(new_events) > 0:
