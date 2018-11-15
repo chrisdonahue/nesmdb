@@ -100,6 +100,34 @@ def nlm_to_vgm(nlm):
   return vgm
 
 
+# NES events
+
+
+def vgm_to_events(vgm):
+  ndr = nesmdb.vgm.vgm_to_ndr(vgm)
+  ndf = nesmdb.vgm.ndr_to_ndf(ndr)
+  rawsco = nesmdb.score.ndf_to_rawsco(ndf)
+  events = nesmdb.score.rawsco_to_events(rawsco)
+  return events
+
+
+def events_to_vgm(events):
+  ndf = nesmdb.score.events_to_ndf(events)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  vgm = nesmdb.vgm.ndr_to_vgm(ndr)
+  return vgm
+
+
+def events_to_txt(events):
+  txt = nesmdb.score.events_to_txt(events)
+  return txt
+
+
+def txt_to_events(txt):
+  events = nesmdb.score.txt_to_events(txt)
+  return events
+
+
 # NES-MDB score formats
 
 
@@ -223,6 +251,12 @@ def main():
       'ndf_to_txt': ('.ndf.pkl', '.ndf.txt'),
       'txt_to_ndf': ('.ndf.txt', '.ndf.pkl'),
       'ndf_to_vgm': ('.ndf.pkl', '.ndf.vgm'),
+
+      # NES events
+      'vgm_to_events': ('.vgm', '.evt.pkl'),
+      'events_to_vgm': ('.evt.pkl', '.evt.vgm'),
+      'events_to_txt': ('.evt.pkl', '.evt.txt'),
+      'txt_to_events': ('.evt.txt', '.evt.pkl'),
 
       # NES language modeling format
       'vgm_to_nlm': ('.vgm', '.nlm.pkl'),

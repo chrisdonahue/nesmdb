@@ -197,3 +197,26 @@ def events_to_ndf(events):
         raise ValueError()
 
   return ndf
+
+
+def events_to_txt(events):
+  return '\n'.join([','.join([str(i) for i in e]) for e in events])
+
+
+def txt_to_events(txt):
+  events = []
+  for line in txt.splitlines():
+    if len(line.strip()) == 0:
+      continue
+
+    tokens = line.strip().split(',')
+    if tokens[0] == 'clock':
+      events.append(('clock', int(tokens[1])))
+    elif tokens[0] == 'w':
+      events.append(('w', int(tokens[1])))
+    elif tokens[0] in ['p1', 'p2', 'tr', 'no']:
+      events.append(tuple([tokens[0], tokens[1]] + [int(t) for t in tokens[2:]]))
+    else:
+      raise ValueError()
+
+  return events
