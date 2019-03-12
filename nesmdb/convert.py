@@ -133,6 +133,11 @@ def midi_to_tx1(midi):
   return tx1
 
 
+def midi_to_tx2(midi):
+  tx2 = nesmdb.lm.midi_to_tx2(midi)
+  return tx2
+
+
 # WAV converters
 
 
@@ -247,6 +252,7 @@ def main():
 
       # NES-MDB performance formats (event-based)
       'midi_to_tx1': ('.mid', '.tx1.txt'),
+      'midi_to_tx2': ('.mid', '.tx2.txt'),
 
       # WAV converters
       'vgm_to_wav': ('.vgm', '.wav'),
@@ -254,7 +260,8 @@ def main():
       'ndf_to_wav': ('.ndf.pkl', '.wav'),
       'nlm_to_wav': ('.nlm.pkl', '.wav'),
       'midi_to_wav': ('.mid', '.mid.wav'),
-      'tx1_to_wav': ('.tx1.txt', '.perf.wav'),
+      'tx1_to_wav': ('.tx1.txt', '.tx1.wav'),
+      'tx2_to_wav': ('.tx2.txt', '.tx2.wav'),
       'exprsco_to_wav': ('.exprsco.pkl', '.exprsco.wav'),
       'seprsco_to_wav': ('.seprsco.pkl', '.seprsco.wav'),
       'blndsco_to_wav': ('.blndsco.pkl', '.blndsco.wav'),

@@ -96,6 +96,22 @@ def _cycle_tx1(ndr, rate):
   return ndr
 
 
+def _cycle_tx2(ndr, rate):
+  ndf = nesmdb.vgm.ndr_to_ndf(ndr)
+  rawsco = nesmdb.score.ndf_to_rawsco(ndf)
+  exprsco = nesmdb.score.rawsco_to_exprsco(rawsco)
+  midi = nesmdb.score.exprsco_to_midi(exprsco)
+  midi_pre_tx2 = midi
+  tx2 = nesmdb.lm.midi_to_tx2(midi)
+  midi = nesmdb.lm.tx2_to_midi(tx2)
+  exprsco = nesmdb.score.midi_to_exprsco(midi)
+  exprsco = nesmdb.score.exprsco_downsample(exprsco, rate, False)
+  rawsco = nesmdb.score.exprsco_to_rawsco(exprsco)
+  ndf = nesmdb.score.rawsco_to_ndf(rawsco)
+  ndr = nesmdb.vgm.ndf_to_ndr(ndf)
+  return ndr
+
+
 def vgm_cycle(source_vgm, representation='ndf', keep_wav=False, **kwargs):
   # Cycle
   source_ndr = nesmdb.vgm.vgm_to_ndr(source_vgm)
@@ -117,6 +133,8 @@ def vgm_cycle(source_vgm, representation='ndf', keep_wav=False, **kwargs):
     cycle_ndr = _cycle_midi(source_ndr, rate=kwargs['score_rate'])
   elif representation == 'tx1':
     cycle_ndr = _cycle_tx1(source_ndr, rate=kwargs['score_rate'])
+  elif representation == 'tx2':
+    cycle_ndr = _cycle_tx2(source_ndr, rate=kwargs['score_rate'])
   else:
     raise NotImplementedError()
   cycle_vgm = nesmdb.vgm.ndr_to_vgm(cycle_ndr)
@@ -152,7 +170,7 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
 
-  parser.add_argument('representation', type=str, choices=['ndr', 'ndf', 'nlm', 'rawsco', 'exprsco', 'seprsco', 'blndsco', 'midi', 'tx1'])
+  parser.add_argument('representation', type=str, choices=['ndr', 'ndf', 'nlm', 'rawsco', 'exprsco', 'seprsco', 'blndsco', 'midi', 'tx1', 'tx2'])
   parser.add_argument('fps', type=str, nargs='+')
   parser.add_argument('--keep_vgm', action='store_true', dest='keep_vgm')
   parser.add_argument('--keep_wav', action='store_true', dest='keep_wav')
