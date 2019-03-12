@@ -43,9 +43,8 @@ def midi_to_tx1(midi):
       last_end = end
       last_pitch = pitch
 
-    # We are opting to correct for this in tx1_to_midi to keep sequence lengths as short as possible
-    #if last_pitch != -1:
-    #  samp_to_events[last_end].append('{}_NOTEOFF'.format(instag))
+    if last_pitch != -1:
+      samp_to_events[last_end].append('{}_NOTEOFF'.format(instag))
 
   tx1 = []
   last_samp = 0
@@ -118,12 +117,7 @@ def tx1_to_midi(tx1):
         name_to_start[name] = None
 
   for name, pitch in name_to_pitch.items():
-    if pitch is not None:
-      name_to_ins[name].notes.append(pretty_midi.Note(
-          velocity=name_to_max_velocity[name],
-          pitch=pitch,
-          start=name_to_start[name] / 44100.,
-          end=samp / 44100.))
+    assert pitch is None
 
   # Create MIDI and add instruments
   midi = pretty_midi.PrettyMIDI(initial_tempo=120, resolution=22050)
