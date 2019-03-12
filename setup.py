@@ -83,7 +83,7 @@ setup(
     url='https://github.com/chrisdonahue/nesmdb',
     download_url='https://github.com/chrisdonahue/nesmdb/releases',
     license='MIT',
-    packages=['nesmdb', 'nesmdb.vgm', 'nesmdb.score'],
+    packages=['nesmdb', 'nesmdb.vgm', 'nesmdb.score', 'nesmdb.lm'],
     keywords='music nes mir midi',
     python_requires='>=2.7,<3.0',
     install_requires=[

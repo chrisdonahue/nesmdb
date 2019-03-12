@@ -7,6 +7,7 @@ from scipy.misc import imsave as imwrite
 
 import nesmdb.vgm
 import nesmdb.score
+import nesmdb.lm
 
 
 def _verify_type(fp, expected):
@@ -127,6 +128,11 @@ def exprsco_to_blndsco(exprsco):
   return blndsco
 
 
+def midi_to_tx1(midi):
+  tx1 = nesmdb.lm.midi_to_tx1(midi)
+  return tx1
+
+
 # WAV converters
 
 
@@ -166,6 +172,11 @@ def midi_to_wav(midi, midi_to_wav_rate=None):
   vgm = nesmdb.vgm.ndr_to_vgm(ndr)
   wav = nesmdb.vgm.vgm_to_wav(vgm)
   return wav
+
+
+def tx1_to_wav(tx1, midi_to_wav_rate=None):
+  midi = nesmdb.lm.tx1_to_midi(tx1)
+  return midi_to_wav(midi, midi_to_wav_rate=midi_to_wav_rate)
 
 
 def exprsco_to_wav(exprsco):
@@ -234,12 +245,16 @@ def main():
       'exprsco_to_seprsco': ('.exprsco.pkl', '.seprsco.pkl'),
       'exprsco_to_blndsco': ('.exprsco.pkl', '.blndsco.pkl'),
 
+      # NES-MDB performance formats (event-based)
+      'midi_to_tx1': ('.mid', '.tx1.txt'),
+
       # WAV converters
       'vgm_to_wav': ('.vgm', '.wav'),
       'ndr_to_wav': ('.ndr.pkl', '.wav'),
       'ndf_to_wav': ('.ndf.pkl', '.wav'),
       'nlm_to_wav': ('.nlm.pkl', '.wav'),
       'midi_to_wav': ('.mid', '.mid.wav'),
+      'tx1_to_wav': ('.tx1.txt', '.perf.wav'),
       'exprsco_to_wav': ('.exprsco.pkl', '.exprsco.wav'),
       'seprsco_to_wav': ('.seprsco.pkl', '.seprsco.wav'),
       'blndsco_to_wav': ('.blndsco.pkl', '.blndsco.wav'),
