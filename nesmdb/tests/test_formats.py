@@ -90,6 +90,42 @@ class TestFormats(TestCase):
     self.assertTrue(2.20 < avg_dist and avg_dist < 2.24)
 
 
+  def test_tx1(self):
+    total_dist = 0.
+    cycle_vgms = []
+    for source_vgm in self.vgms:
+      cycle_vgm = nesmdb.cycle.vgm_cycle(source_vgm, 'tx1', score_rate=24.)
+      total_dist += nesmdb.cycle.vgm_dist(source_vgm, cycle_vgm)[0]
+      cycle_vgms.append(cycle_vgm)
+
+    # Make sure shortened lengths are correct
+    self.assertListEqual(
+        [len(v) for v in cycle_vgms],
+        [8158, 10942, 859, 805, 10564])
+
+    # Make sure the MIDI files are the same as expressive score
+    avg_dist = total_dist / len(self.vgms)
+    self.assertTrue(12.40 < avg_dist and avg_dist < 12.42)
+
+
+  def test_tx2(self):
+    total_dist = 0.
+    cycle_vgms = []
+    for source_vgm in self.vgms:
+      cycle_vgm = nesmdb.cycle.vgm_cycle(source_vgm, 'tx2', score_rate=24.)
+      total_dist += nesmdb.cycle.vgm_dist(source_vgm, cycle_vgm)[0]
+      cycle_vgms.append(cycle_vgm)
+
+    # Make sure shortened lengths are correct
+    self.assertListEqual(
+        [len(v) for v in cycle_vgms],
+        [12283, 16303, 1162, 1063, 15880])
+
+    # Make sure the MIDI files are the same as expressive score
+    avg_dist = total_dist / len(self.vgms)
+    self.assertTrue(2.20 < avg_dist and avg_dist < 2.24)
+
+
   def test_exprsco(self):
     total_dist = 0.
     cycle_vgms = []
