@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import mode
 
 
-def rawsco_to_exprsco(rawsco, midi_valid_range=(21, 108)):
+def rawsco_to_exprsco(rawsco, midi_valid_range=(1, 127)):
   clock, rate, nsamps, rawsco = rawsco
   assert rate == 44100
   assert rawsco.shape[0] == nsamps
