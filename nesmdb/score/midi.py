@@ -5,6 +5,7 @@ import tempfile
 
 def exprsco_to_midi(exprsco):
   import pretty_midi
+  pretty_midi.pretty_midi.MAX_TICK = 1e16
 
   rate, nsamps, exprsco = exprsco
 
@@ -94,6 +95,7 @@ def exprsco_to_midi(exprsco):
 
 def midi_to_exprsco(midi):
   import pretty_midi
+  pretty_midi.pretty_midi.MAX_TICK = 1e16
 
   # Write/read MIDI file
   mf = tempfile.NamedTemporaryFile('wb')
