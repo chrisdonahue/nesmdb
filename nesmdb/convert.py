@@ -138,6 +138,16 @@ def midi_to_tx2(midi):
   return tx2
 
 
+def tx1_to_vgm(tx1, midi_downsample_rate=None):
+  midi = nesmdb.lm.tx1_to_midi(tx1)
+  return midi_to_vgm(midi, midi_downsample_rate=midi_downsample_rate)
+
+
+def tx2_to_vgm(tx2, midi_downsample_rate=None):
+  midi = nesmdb.lm.tx2_to_midi(tx2)
+  return midi_to_vgm(midi, midi_downsample_rate=midi_downsample_rate)
+
+
 # WAV converters
 
 
@@ -167,21 +177,31 @@ def nlm_to_wav(nlm):
   return wav
 
 
-def midi_to_wav(midi, midi_to_wav_rate=None):
+def midi_to_vgm(midi, midi_downsample_rate=None):
   exprsco = nesmdb.score.midi_to_exprsco(midi)
-  if midi_to_wav_rate is not None:
-    exprsco = nesmdb.score.exprsco_downsample(exprsco, midi_to_wav_rate, False)
+  if midi_downsample_rate is not None:
+    exprsco = nesmdb.score.exprsco_downsample(exprsco, midi_downsample_rate, False)
   rawsco = nesmdb.score.exprsco_to_rawsco(exprsco)
   ndf = nesmdb.score.rawsco_to_ndf(rawsco)
   ndr = nesmdb.vgm.ndf_to_ndr(ndf)
   vgm = nesmdb.vgm.ndr_to_vgm(ndr)
+  return vgm
+
+
+def midi_to_wav(midi, midi_downsample_rate=None):
+  vgm = midi_to_vgm(midi, midi_downsample_rate=midi_downsample_rate)
   wav = nesmdb.vgm.vgm_to_wav(vgm)
   return wav
 
 
-def tx1_to_wav(tx1, midi_to_wav_rate=None):
+def tx1_to_wav(tx1, midi_downsample_rate=None):
   midi = nesmdb.lm.tx1_to_midi(tx1)
-  return midi_to_wav(midi, midi_to_wav_rate=midi_to_wav_rate)
+  return midi_to_wav(midi, midi_downsample_rate=midi_downsample_rate)
+
+
+def tx2_to_wav(tx2, midi_downsample_rate=None):
+  midi = nesmdb.lm.tx2_to_midi(tx2)
+  return midi_to_wav(midi, midi_downsample_rate=midi_downsample_rate)
 
 
 def exprsco_to_wav(exprsco):
@@ -253,6 +273,8 @@ def main():
       # NES-MDB performance formats (event-based)
       'midi_to_tx1': ('.mid', '.tx1.txt'),
       'midi_to_tx2': ('.mid', '.tx2.txt'),
+      'tx1_to_vgm': ('.tx1.txt', '.tx1.vgm'),
+      'tx2_to_vgm': ('.tx1.txt', '.tx1.vgm'),
 
       # WAV converters
       'vgm_to_wav': ('.vgm', '.wav'),
@@ -271,7 +293,11 @@ def main():
       'vgm_simplify': ['vgm_simplify_nop1', 'vgm_simplify_nop2', 'vgm_simplify_notr', 'vgm_simplify_nono'],
       'vgm_shorten': ['vgm_shorten_start', 'vgm_shorten_nmax'],
       'ndf_to_exprsco': ['ndf_to_exprsco_rate'],
-      'midi_to_wav': ['midi_to_wav_rate'],
+      'midi_to_wav': ['midi_downsample_rate'],
+      'tx1_to_vgm': ['midi_downsample_rate'],
+      'tx2_to_vgm': ['midi_downsample_rate'],
+      'tx1_to_wav': ['midi_downsample_rate'],
+      'tx2_to_wav': ['midi_downsample_rate']
   }
 
   parser.add_argument('conversion', type=str, choices=conversion_to_types.keys())
@@ -285,7 +311,7 @@ def main():
   parser.add_argument('--vgm_simplify_notr', action='store_true', dest='vgm_simplify_notr')
   parser.add_argument('--vgm_simplify_nono', action='store_true', dest='vgm_simplify_nono')
   parser.add_argument('--ndf_to_exprsco_rate', type=float)
-  parser.add_argument('--midi_to_wav_rate', type=float)
+  parser.add_argument('--midi_downsample_rate', type=float)
 
   parser.set_defaults(
       conversion=None,
@@ -299,7 +325,7 @@ def main():
       vgm_simplify_notr=False,
       vgm_simplify_nono=False,
       ndf_to_exprsco_rate=None,
-      midi_to_wav_rate=None)
+      midi_downsample_rate=None)
 
   args = parser.parse_args()
 
