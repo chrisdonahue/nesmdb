@@ -39,7 +39,8 @@ def midi_to_tx2(midi):
       if last_end >= 0 and last_end != start:
         samp_to_events[last_end].append('{}_NOTEOFF'.format(instag))
       samp_to_events[start].append('{}_NOTEON_{}'.format(instag, pitch))
-      samp_to_events[start].append('{}_VELOCITY_{}'.format(instag, velocity))
+      if instag != 'TR':
+        samp_to_events[start].append('{}_VELOCITY_{}'.format(instag, velocity))
 
       last_start = start
       last_end = end
