@@ -121,8 +121,8 @@ def tx2_to_midi(tx2):
       name = tokens[0]
       ins = name_to_ins[tokens[0]]
 
+      old_pitch = name_to_pitch[name]
       if tokens[1] == 'NOTEON':
-        old_pitch = name_to_pitch[name]
         if old_pitch is not None:
           ins.notes.append(pretty_midi.Note(
               velocity=name_to_max_velocity[name],
@@ -132,13 +132,12 @@ def tx2_to_midi(tx2):
         name_to_pitch[name] = int(tokens[2])
         name_to_start[name] = samp
       elif tokens[1] == 'NOTEOFF':
-        assert name_to_pitch[name] is not None
-
-        ins.notes.append(pretty_midi.Note(
-            velocity=name_to_max_velocity[name],
-            pitch=name_to_pitch[name],
-            start=name_to_start[name] / 44100.,
-            end=samp / 44100.))
+        if old_pitch is not None:
+          ins.notes.append(pretty_midi.Note(
+              velocity=name_to_max_velocity[name],
+              pitch=name_to_pitch[name],
+              start=name_to_start[name] / 44100.,
+              end=samp / 44100.))
 
         name_to_pitch[name] = None
         name_to_start[name] = None
@@ -155,8 +154,9 @@ def tx2_to_midi(tx2):
       else:
         raise ValueError()
 
-  for name, pitch in name_to_pitch.items():
-    assert pitch is None
+  # Deactivating this for generated files
+  #for name, pitch in name_to_pitch.items():
+  #  assert pitch is None
 
   # Create MIDI and add instruments
   midi = pretty_midi.PrettyMIDI(initial_tempo=120, resolution=22050)

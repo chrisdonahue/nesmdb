@@ -274,7 +274,7 @@ def main():
       'midi_to_tx1': ('.mid', '.tx1.txt'),
       'midi_to_tx2': ('.mid', '.tx2.txt'),
       'tx1_to_vgm': ('.tx1.txt', '.tx1.vgm'),
-      'tx2_to_vgm': ('.tx1.txt', '.tx1.vgm'),
+      'tx2_to_vgm': ('.tx2.txt', '.tx2.vgm'),
 
       # WAV converters
       'vgm_to_wav': ('.vgm', '.wav'),
