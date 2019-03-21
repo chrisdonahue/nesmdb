@@ -105,8 +105,17 @@ def midi_to_exprsco(midi):
   mf.close()
 
   # Recover number of samples from time signature change indicator
-  assert len(midi.time_signature_changes) == 2
-  nsamps = int(np.round(midi.time_signature_changes[1].time * 44100))
+  if len(midi.time_signature_changes) == 1:
+    assert midi.time_signature_changes[0].numerator == 1
+    assert midi.time_signature_changes[0].denominator == 1
+    assert midi.time_signature_changes[0].time == 0
+    nsamps = 0
+  elif len(midi.time_signature_changes) == 2:
+    assert midi.time_signature_changes[1].numerator == 1
+    assert midi.time_signature_changes[1].denominator == 1
+    nsamps = int(np.round(midi.time_signature_changes[1].time * 44100))
+  else:
+    raise ValueError()
 
   # Find voices in MIDI
   exprsco = np.zeros((nsamps, 4, 3), dtype=np.uint8)
