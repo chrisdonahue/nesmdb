@@ -1,5 +1,6 @@
 import cPickle as pickle
 import os
+import subprocess
 
 import numpy as np
 from scipy.io.wavfile import write as wavwrite
@@ -233,6 +234,10 @@ def blndsco_to_wav(blndsco):
   return wav
 
 
+def wav_to_ogg(wav_fp):
+  return None
+
+
 def main():
   import argparse
   import os
@@ -287,6 +292,7 @@ def main():
       'exprsco_to_wav': ('.exprsco.pkl', '.exprsco.wav'),
       'seprsco_to_wav': ('.seprsco.pkl', '.seprsco.wav'),
       'blndsco_to_wav': ('.blndsco.pkl', '.blndsco.wav'),
+      'wav_to_ogg': ('.wav', '.ogg')
   }
 
   conversion_to_kwargs = {
@@ -362,6 +368,8 @@ def main():
     elif in_ext == 'txt':
       with open(in_fp, 'r') as f:
         in_file = f.read()
+    elif in_ext == 'wav':
+      in_file = in_fp
     else:
       raise NotImplementedError('Input extension .{} not recognized'.format(in_ext))
 
@@ -394,6 +402,10 @@ def main():
       wav = np.clip(wav, -32767., 32767.)
       wav = wav.astype(np.int16)
       wavwrite(out_fp, 44100, wav)
+    elif out_ext == 'ogg':
+      res = subprocess.call('ffmpeg -i {} {} -loglevel error -hide_banner -y'.format(in_fp, out_fp).split())
+      if res > 0:
+        raise ValueError('ffmpeg failed')
     else:
       raise NotImplementedError('Output extension .{} not recognized'.format(out_ext))
 
