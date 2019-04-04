@@ -310,6 +310,7 @@ def main():
   parser.add_argument('fps', type=str, nargs='+')
   parser.add_argument('--out_dir', type=str)
   parser.add_argument('--skip_verify', action='store_true', dest='skip_verify')
+  parser.add_argument('--skip_existing', action='store_true', dest='skip_existing')
   parser.add_argument('--vgm_shorten_start', type=int)
   parser.add_argument('--vgm_shorten_nmax', type=int)
   parser.add_argument('--vgm_simplify_nop1', action='store_true', dest='vgm_simplify_nop1')
@@ -324,6 +325,7 @@ def main():
       fps=None,
       out_dir=None,
       skip_verify=False,
+      skip_existing=False,
       vgm_shorten_start=None,
       vgm_shorten_nmax=1024,
       vgm_simplify_nop1=False,
@@ -356,6 +358,9 @@ def main():
     if not args.skip_verify:
       _verify_type(in_fp, in_type)
       _verify_type(out_fp, out_type)
+
+    if args.skip_existing and os.path.exists(out_fp):
+      continue
 
     # Load input file
     in_ext = in_type.split('.')[-1]
