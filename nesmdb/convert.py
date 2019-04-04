@@ -355,12 +355,12 @@ def main():
       os.makedirs(args.out_dir)
 
   for in_fp, out_fp in tqdm(zip(fps, out_fps)):
+    if args.skip_existing and os.path.exists(out_fp):
+      continue
+
     if not args.skip_verify:
       _verify_type(in_fp, in_type)
       _verify_type(out_fp, out_type)
-
-    if args.skip_existing and os.path.exists(out_fp):
-      continue
 
     # Load input file
     in_ext = in_type.split('.')[-1]
