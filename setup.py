@@ -1,3 +1,4 @@
+from __future__ import print_function
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools.command.develop import develop
@@ -6,7 +7,14 @@ import os
 import shutil
 import subprocess
 import tarfile
-import urllib
+import sys
+
+try:
+  # python 2
+  from urllib import urlretrieve
+except:
+  # python 3
+  from urllib.request import urlretrieve
 
 
 def _build_vgm_play(build_temp, build_lib):
@@ -17,34 +25,47 @@ def _build_vgm_play(build_temp, build_lib):
     made_build_temp = True
 
   # Download VGMPlay 0.40.8
-  print 'Downloading VGMPlay'
+  print('Downloading VGMPlay')
   tgz_filepath = os.path.join(build_temp, '0.40.8.tar.gz')
-  urllib.urlretrieve(
+  urlretrieve(
       'https://github.com/vgmrips/vgmplay/archive/0.40.8.tar.gz',
       tgz_filepath)
 
   # Extract
-  print 'Extracting VGMPlay'
+  print('Extracting VGMPlay')
   with tarfile.open(tgz_filepath, 'r:gz') as f:
     f.extractall(build_temp)
   vgmplay_dir = os.path.join(build_temp, 'vgmplay-0.40.8', 'VGMPlay')
   if not os.path.isdir(vgmplay_dir):
-    raise Exception('Could not extract VGMPlay')
+    print('WARNING: Could not extract VGMPlay')
 
   # Modify makefile
   makefile_fp = os.path.join(vgmplay_dir, 'Makefile')
   with open(makefile_fp, 'r') as f:
     makefile = f.read()
-  makefile = makefile.replace('USE_LIBAO = 1', '#USE_LIBAO = 1')
+  # uncomment macosx flag if os is darwin
+  if sys.platform == 'darwin':
+    makefile = makefile.replace('#MACOSX = 1', 'MACOSX = 1')
+  # only use libao on darwin
+  else:
+    makefile = makefile.replace('USE_LIBAO = 1', '#USE_LIBAO = 1')
   with open(makefile_fp, 'w') as f:
     f.write(makefile)
 
+  # Remove redefined function in VGMPlay.c to enable builds on OSX
+  vgmplay_fp = os.path.join(vgmplay_dir, 'VGMPlay.c')
+  with open(vgmplay_fp, 'r') as f:
+    source = f.read()
+  source = source.replace('int clock_gettime', 'int unused_clock_gettime')
+  with open(vgmplay_fp, 'w') as f:
+    f.write(source)
+
   # Build
-  print 'Building VGMPlay'
+  print('Building VGMPlay')
   command = 'make -C {} vgm2wav'.format(vgmplay_dir)
   res = subprocess.call(command.split())
   if res > 0:
-    raise Exception('Error building VGMPlay')
+    print('WARNING: Error building VGMPlay')
 
   # Copy binary to build dir
   bin_fp = os.path.join(vgmplay_dir, 'vgm2wav')
@@ -85,11 +106,12 @@ setup(
     license='MIT',
     packages=['nesmdb', 'nesmdb.vgm', 'nesmdb.score'],
     keywords='music nes mir midi',
-    python_requires='>=2.7,<3.0',
+    python_requires='>=2.7',
     install_requires=[
       'numpy >= 1.7.0',
       'scipy >= 1.0.0',
       'Pillow >= 5.1.0',
+      'six>=1.13.0',
       'tqdm >= 4.19.9',
     ],
     test_suite='nose.collector',
