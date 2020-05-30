@@ -1,5 +1,5 @@
 def nd_to_txt(nd):
-  txt = filter(lambda c: c[0] != 'ram', nd)
+  txt = [c for c in nd if c[0] != 'ram']
   txt = [','.join([str(f) for f in c]) for c in txt]
   txt = '\n'.join(txt)
 

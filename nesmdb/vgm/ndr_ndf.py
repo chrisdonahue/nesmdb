@@ -152,7 +152,7 @@ def ndf_to_ndr(ndf):
   for comm in ndf:
     itype = comm[0]
     if itype == 'wait':
-      for _, (arg1, arg2) in regn_to_val.items():
+      for _, (arg1, arg2) in list(regn_to_val.items()):
         ndr.append(('apu', b2h(c2b(arg1)), b2h(c2b(arg2))))
       regn_to_val = OrderedDict()
 
@@ -193,7 +193,7 @@ def ndf_to_ndr(ndf):
     else:
       raise NotImplementedError()
 
-  for _, (arg1, arg2) in regn_to_val.items():
+  for _, (arg1, arg2) in list(regn_to_val.items()):
     ndr.append(('apu', b2h(c2b(arg1)), b2h(c2b(arg2))))
 
   return ndr

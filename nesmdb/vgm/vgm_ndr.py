@@ -1,7 +1,6 @@
 from nesmdb.apu import *
 from nesmdb.vgm.bintypes import *
 
-
 def vgm_to_ndr(vgm):
   # Retrieve EOF offset
   eof_offset = offset(b2p(vgm[0x04:0x08]), 0x04)
@@ -154,9 +153,8 @@ def ndr_to_vgm(ndr):
 
   ndr = ndr[1:]
 
-  EMPTYBYTE = i2lub(0)
-  flatten = lambda vgm: list(''.join(vgm))
-  vgm = flatten([EMPTYBYTE] * 48)
+  flatten = lambda x: list(b''.join([int2b(i) for i in x]))
+  vgm = [c2b(0) for i in range(48*4)]
 
   # VGM identifier
   vgm[:0x04] = [c2b(c) for c in [0x56, 0x67, 0x6d, 0x20]]
@@ -166,6 +164,9 @@ def ndr_to_vgm(ndr):
   vgm[0x84:0x88] = i2lub(clock)
   # Data offset
   vgm[0x34:0x38] = i2lub(0xc0 - 0x34)
+
+  # convert array to bytes
+  vgm = [int2b(i) for i in vgm]
 
   wait_sum = 0
   for comm in ndr:
@@ -201,5 +202,5 @@ def ndr_to_vgm(ndr):
   # EoF offset
   vgm[0x04:0x08] = i2lub(len(vgm) - 0x04)
 
-  vgm = ''.join(vgm)
+  vgm = b''.join([int2b(i) for i in vgm])
   return vgm

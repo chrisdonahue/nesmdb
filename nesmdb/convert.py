@@ -1,9 +1,14 @@
-import cPickle as pickle
 import os
+
+try:
+  # python 2
+  import pickle as pickle
+except:
+  # python 3
+  import pickle as pickle
 
 import numpy as np
 from scipy.io.wavfile import write as wavwrite
-from scipy.misc import imsave as imwrite
 
 import nesmdb.vgm
 import nesmdb.score
@@ -252,7 +257,7 @@ def main():
       'midi_to_wav': ['midi_to_wav_rate'],
   }
 
-  parser.add_argument('conversion', type=str, choices=conversion_to_types.keys())
+  parser.add_argument('conversion', type=str, choices=list(conversion_to_types.keys()))
   parser.add_argument('fps', type=str, nargs='+')
   parser.add_argument('--out_dir', type=str)
   parser.add_argument('--skip_verify', action='store_true', dest='skip_verify')
@@ -294,11 +299,11 @@ def main():
     out_fps = [os.path.join(args.out_dir, fn) for fn in out_fns]
 
     if os.path.exists(args.out_dir):
-      print 'WARNING: Output directory {} already exists'.format(args.out_dir)
+      print('WARNING: Output directory {} already exists'.format(args.out_dir))
     else:
       os.makedirs(args.out_dir)
 
-  for in_fp, out_fp in tqdm(zip(fps, out_fps)):
+  for in_fp, out_fp in tqdm(list(zip(fps, out_fps))):
     if not args.skip_verify:
       _verify_type(in_fp, in_type)
       _verify_type(out_fp, out_type)
@@ -324,8 +329,8 @@ def main():
     try:
       out_file = globals()[args.conversion](in_file, **kwargs)
     except:
-      print '-' * 80
-      print in_fp
+      print('-' * 80)
+      print(in_fp)
       traceback.print_exc()
       continue
 

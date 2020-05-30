@@ -38,7 +38,7 @@ def vgm_simplify(vgm, nop1=False, nop2=False, notr=False, nono=False, nodm=True)
     b = vgm[i]
     bhex = b2h(b)
     if bhex == '54':
-      delidxs.extend(range(i, i + 3))
+      delidxs.extend(list(range(i, i + 3)))
       i += 3
     elif bhex == '61':
       i += 3
@@ -48,19 +48,19 @@ def vgm_simplify(vgm, nop1=False, nop2=False, notr=False, nono=False, nodm=True)
       break
     elif bhex == '67':
       data_size = b2lu(''.join(vgm[i+3:i+7]))
-      delidxs.extend(range(i, i + 3 + 4 + data_size))
+      delidxs.extend(list(range(i, i + 3 + 4 + data_size)))
       delcmds += 1
       i += 3 + 4 + data_size
     elif bhex[0] == '7':
       i += 1
     elif bhex == 'a0':
-      delidxs.extend(range(i, i + 3))
+      delidxs.extend(list(range(i, i + 3)))
       i += 3
     elif bhex == 'b4':
       arg1 = vgm[i+1]
       arg1hex = b2h(arg1)
       if arg1hex not in valid_registers:
-        delidxs.extend(range(i, i + 3))
+        delidxs.extend(list(range(i, i + 3)))
         delcmds += 1
       i += 3
     else:

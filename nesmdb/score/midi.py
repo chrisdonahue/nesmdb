@@ -1,3 +1,4 @@
+from __future__ import division
 from collections import defaultdict
 import numpy as np
 import tempfile
@@ -60,7 +61,7 @@ def exprsco_to_midi(exprsco):
       note_ends.append(s + 1)
 
     assert len(note_starts) == len(note_ends)
-    notes[i] = zip(note_starts, note_ends)
+    notes[i] = list(zip(note_starts, note_ends))
     ccs[i] = ch_ccs
 
   # Add notes to MIDI instruments
@@ -140,7 +141,7 @@ def midi_to_exprsco(midi):
     note = 0
     velocity = 0
     timbre = 0
-    for i in xrange(nsamps):
+    for i in range(nsamps):
       for comm in comms[i]:
         if comm[0] == 'note_on':
           note = comm[1]
