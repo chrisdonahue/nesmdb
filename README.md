@@ -28,13 +28,13 @@ If your background is in **algorithmic composition**, we recommend using either 
 
 Hover download links for SHA256 checksums.
 
-- `( 12 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_midi.tar.gz "37610e2ca5fe70359c85170cf1f4982596783bb304c59d9c439f68c24ff4ee93") NES-MDB in [MIDI Format](#midi-format)
-- `( 11 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb24_exprsco.tar.gz "7ca09fdf2be6db5c0767ef6ef7f3f4cac06ae23336c463d123009681b9d64d50") NES-MDB in [Expressive Score Format](#expressive-score)
-- `( 04 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb24_seprsco.tar.gz "3e2dadfc0b499cc730a7d2143705215e6cf5abec9e75e6a3e6131f4f9fefeb3a") NES-MDB in [Separated Score Format](#separated-score)
-- `( 41 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb24_blndsco.tar.gz "d72027bdbf91fd983963136199c9d60e7b2c6dca8cd461c04bd97ca14425893d") NES-MDB in [Blended Score Format](#blended-score)
-- `(155 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_nlm.tar.gz "5e37a6fe3fa3bb96c93e0d938d89df2767ddfc9d3153b6de6c11f5b9d57bd3a3") NES-MDB in [Language Modeling Format](#language-modeling-format)
-- `( 31 MB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_vgm.tar.gz "cd44290957cd2dd22a497966f79d24d2a0cdfe135afa83857f25c0871893abc7") NES-MDB in [Raw VGM Format](#raw-format)
-- `( 66 KB)` [Download](http://deepyeti.ucsd.edu/cdonahue/nesmdb/nesmdb_meta.pkl "a327a34e64e9809c5cdceed882d5519d99e5cdc9c206a096ccd74975c694af62") NES-MDB Composer Metadata
+- `( 12 MB)` [Download](https://drive.google.com/file/d/1tyDEwe0exW4xU1W7ZzUMWoTv8K43jF_5/view?usp=share_link "37610e2ca5fe70359c85170cf1f4982596783bb304c59d9c439f68c24ff4ee93") NES-MDB in [MIDI Format](#midi-format)
+- `( 11 MB)` [Download](https://drive.google.com/file/d/1gE40sYDry5tPDjTC_4uDM1U_bzsy3THp/view?usp=share_link "7ca09fdf2be6db5c0767ef6ef7f3f4cac06ae23336c463d123009681b9d64d50") NES-MDB in [Expressive Score Format](#expressive-score)
+- `( 04 MB)` [Download](https://drive.google.com/file/d/1ohuw7rASz6jDJHqLd8viHV3e36_4q9Jy/view?usp=share_link "3e2dadfc0b499cc730a7d2143705215e6cf5abec9e75e6a3e6131f4f9fefeb3a") NES-MDB in [Separated Score Format](#separated-score)
+- `( 41 MB)` [Download](https://drive.google.com/file/d/1Myv1LP0RA1YWhaUKrmlOGIeGc4ZZV6ER/view?usp=share_link "d72027bdbf91fd983963136199c9d60e7b2c6dca8cd461c04bd97ca14425893d") NES-MDB in [Blended Score Format](#blended-score)
+- `(155 MB)` [Download](https://drive.google.com/file/d/1Z6RtPpKWCTYUJjvRV3PhyYuEDzdT82r4/view?usp=share_link "5e37a6fe3fa3bb96c93e0d938d89df2767ddfc9d3153b6de6c11f5b9d57bd3a3") NES-MDB in [Language Modeling Format](#language-modeling-format)
+- `( 31 MB)` [Download](https://drive.google.com/file/d/16Vt-q1kugNfyRy23SYxRRVDGZfQqEWQ3/view?usp=share_link "cd44290957cd2dd22a497966f79d24d2a0cdfe135afa83857f25c0871893abc7") NES-MDB in [Raw VGM Format](#raw-format)
+- `( 66 KB)` [Download](https://drive.google.com/file/d/1rU_5UEZ2pvfUUo8TMYMpSgsKgtiiNHsk/view?usp=share_link "a327a34e64e9809c5cdceed882d5519d99e5cdc9c206a096ccd74975c694af62") NES-MDB Composer Metadata
 
 ### MIDI format
 
