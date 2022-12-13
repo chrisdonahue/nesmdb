@@ -1,3 +1,5 @@
+from __future__ import division
+
 # System master clock rates by console region
 ntsc_clock = (21477272. / 12.) # ~1789772.67
 pal_clock = 1662607.
@@ -144,7 +146,7 @@ register_function_bitmasks['p2'] = register_function_bitmasks['p1']
 
 
 def func_to_bitmask(ch, fu):
-  for offset, bitmasks in register_function_bitmasks[ch].items():
+  for offset, bitmasks in list(register_function_bitmasks[ch].items()):
     for fu_name, bitmask in bitmasks:
       if fu_name == fu:
         return bitmask
@@ -159,7 +161,7 @@ def func_to_max(ch, fu):
 
 
 def func_to_offset(ch, fu):
-  for offset, bitmasks in register_function_bitmasks[ch].items():
+  for offset, bitmasks in list(register_function_bitmasks[ch].items()):
     for fu_name, bitmask in bitmasks:
       if fu_name == fu:
         return offset

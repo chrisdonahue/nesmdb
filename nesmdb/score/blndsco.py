@@ -5,9 +5,9 @@ def exprsco_to_blndsco(exprsco):
   rate, nsamps, score = exprsco
 
   blndsco = []
-  for i in xrange(score.shape[0]):
+  for i in range(score.shape[0]):
     score_slice = list(score[i, :3, 0])
-    score_slice = sorted(filter(lambda x: x > 0, score_slice))
+    score_slice = sorted([x for x in score_slice if x > 0])
     blndsco.append(score_slice)
 
   return (rate, nsamps, blndsco)

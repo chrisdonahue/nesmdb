@@ -1,3 +1,4 @@
+from __future__ import division
 from collections import defaultdict, Counter
 import math
 
@@ -54,10 +55,10 @@ def exprsco_downsample(exprsco, rate, adaptive):
 
   if rate is None:
     # Find note onsets
-    ch_to_last_note = {ch:0 for ch in xrange(4)}
+    ch_to_last_note = {ch:0 for ch in range(4)}
     ch_to_onsets = defaultdict(list)
-    for i in xrange(exprsco.shape[0]):
-      for j in xrange(4):
+    for i in range(exprsco.shape[0]):
+      for j in range(4):
         last_note = ch_to_last_note[j]
         note = exprsco[i, j, 0]
         if note > 0 and note != last_note:
@@ -66,13 +67,13 @@ def exprsco_downsample(exprsco, rate, adaptive):
 
     # Find note intervals
     intervals = Counter()
-    for _, onsets in ch_to_onsets.items():
-      for i in xrange(1, len(onsets)):
+    for _, onsets in list(ch_to_onsets.items()):
+      for i in range(1, len(onsets)):
         interval = onsets[i] - onsets[i - 1]
         # Minimum length 1ms
         if interval > 44:
           intervals[interval] += 1
-    intervals_t = {i / 44100.:c for i, c in intervals.items()}
+    intervals_t = {i / 44100.:c for i, c in list(intervals.items())}
 
     # Raise error if we don't have enough info to estimate tempo
     num_intervals = sum(intervals.values())
@@ -85,7 +86,7 @@ def exprsco_downsample(exprsco, rate, adaptive):
     rate_errors = []
     for rate in np.arange(1., 24. + disc, disc):
       error = 0.
-      for interval, count in intervals_t.items():
+      for interval, count in list(intervals_t.items()):
         quotient = math.floor(interval * rate + 1e-8)
         remainder = interval - (quotient / rate)
         if remainder < 0 and abs(remainder) < 1e-8:
@@ -102,13 +103,13 @@ def exprsco_downsample(exprsco, rate, adaptive):
   rate = float(rate)
   ndown = int((nsamps / 44100.) * rate)
   score_low = np.zeros((ndown, 4, 3), dtype=np.uint8)
-  for i in xrange(ndown):
+  for i in range(ndown):
     t_lo = i / rate
     t_hi = (i + 1) / rate
     # TODO: round these instead of casting?
     samp_lo, samp_hi = [int(t * 44100.) for t in [t_lo, t_hi]]
     score_slice = exprsco[samp_lo:samp_hi]
-    for ch in xrange(4):
+    for ch in range(4):
       score_slice_ch = score_slice[:, ch, :]
       on_frames = np.where(score_slice_ch[:, 0] != 0)[0]
       if len(on_frames) > 0:

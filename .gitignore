@@ -1,2 +1,5 @@
 *.pyc
+*.swp
+*.DS_Store
+build
 nesmdb.egg-info

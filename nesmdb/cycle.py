@@ -152,7 +152,7 @@ if __name__ == '__main__':
   args = parser.parse_args()
 
   if args.representation not in ['ndr', 'ndf', 'nlm', 'rawsco'] and args.score_rate is None:
-    print 'Must specify --score_rate'
+    print('Must specify --score_rate')
     sys.exit(1)
 
   kwargs = {'score_rate': args.score_rate}
@@ -169,14 +169,14 @@ if __name__ == '__main__':
     try:
       cycle_vgm = vgm_cycle(source_vgm, representation=args.representation, **kwargs)
     except:
-      print '-' * 80
-      print vgm_fp
-      print traceback.print_exc()
+      print('-' * 80)
+      print(vgm_fp)
+      print(traceback.print_exc())
       continue
 
     dist, source_wav, cycle_wav = vgm_dist(source_vgm, cycle_vgm)
     vgm_fp_to_dist[vgm_fp] = dist
-    
+
     if args.keep_vgm:
       with open(vgm_fp.replace('.vgm', '.source.vgm'), 'wb') as f:
         f.write(source_vgm)
@@ -187,14 +187,14 @@ if __name__ == '__main__':
       nesmdb.vgm.save_vgmwav(vgm_fp.replace('.vgm', '.source.wav'), source_wav)
       nesmdb.vgm.save_vgmwav(vgm_fp.replace('.vgm', '.cycle.wav'), cycle_wav)
 
-  dists = vgm_fp_to_dist.values()
-  print 'Mean distance (n={}): {} (std={})'.format(len(dists), np.mean(dists), np.std(dists))
+  dists = list(vgm_fp_to_dist.values())
+  print('Mean distance (n={}): {} (std={})'.format(len(dists), np.mean(dists), np.std(dists)))
 
   if not args.quiet:
-    print '-' * 40 + ' Worst ' + '-' * 40
-    for vgm_fp, dist in sorted(vgm_fp_to_dist.items(), key=lambda x:-x[1])[:8]:
-      print '{:.8f}: {}'.format(dist, vgm_fp)
+    print('-' * 40 + ' Worst ' + '-' * 40)
+    for vgm_fp, dist in sorted(list(vgm_fp_to_dist.items()), key=lambda x:-x[1])[:8]:
+      print('{:.8f}: {}'.format(dist, vgm_fp))
 
-    print '-' * 40 + ' Best ' + '-' * 40
-    for vgm_fp, dist in sorted(vgm_fp_to_dist.items(), key=lambda x:x[1])[:8]:
-      print '{:.8f}: {}'.format(dist, vgm_fp)
+    print('-' * 40 + ' Best ' + '-' * 40)
+    for vgm_fp, dist in sorted(list(vgm_fp_to_dist.items()), key=lambda x:x[1])[:8]:
+      print('{:.8f}: {}'.format(dist, vgm_fp))
