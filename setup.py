@@ -17,19 +17,12 @@ def _build_vgm_play(build_temp, build_lib):
     made_build_temp = True
 
   # Download VGMPlay 0.40.8
-  print 'Downloading VGMPlay'
-  tgz_filepath = os.path.join(build_temp, '0.40.8.tar.gz')
-  urllib.urlretrieve(
-      'https://github.com/vgmrips/vgmplay/archive/0.40.8.tar.gz',
-      tgz_filepath)
+  print 'Cloning VGMPlay'
+  os.system("git clone https://github.com/vgmrips/vgmplay.git {}".format(os.path.join(build_temp, "vgmplay-latest")))
 
-  # Extract
-  print 'Extracting VGMPlay'
-  with tarfile.open(tgz_filepath, 'r:gz') as f:
-    f.extractall(build_temp)
-  vgmplay_dir = os.path.join(build_temp, 'vgmplay-0.40.8', 'VGMPlay')
+  vgmplay_dir = os.path.join(build_temp, 'vgmplay-latest', 'VGMPlay')
   if not os.path.isdir(vgmplay_dir):
-    raise Exception('Could not extract VGMPlay')
+    raise Exception('Could not clone VGMPlay')
 
   # Modify makefile
   makefile_fp = os.path.join(vgmplay_dir, 'Makefile')
@@ -56,8 +49,7 @@ def _build_vgm_play(build_temp, build_lib):
   if made_build_temp:
     shutil.rmtree(build_temp)
   else:
-    os.remove(tgz_filepath)
-    shutil.rmtree(os.path.join(build_temp, 'vgmplay-0.40.8'))
+    shutil.rmtree(os.path.join(build_temp, 'vgmplay-latest'))
 
 
 class VGMPlayDevelop(develop):
